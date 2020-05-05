@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Under development">
+<meta name="author" content="Alyaxey Yaskevich">
+<title>Свод русских надписей</title>
+<link href="https://fonts.googleapis.com/css?family=Merriweather&amp;subset=cyrillic-ext" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=PT+Serif&amp;subset=cyrillic-ext" rel="stylesheet">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css"> -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+<script src="https://cdn.jsdelivr.net/g/filesaver.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.1.0/mustache.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+<!-- <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/000000/sun.png" /> -->
+
+<link rel="icon" type="image/png" href="omega-150x150.png" sizes="32x32" />
+
+<!-- <link rel="stylesheet" href="bulma.min.css"> -->
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="css/bulma-extensions.min.css">
+    <!-- https://sci.ponomar.net/ru/tools.html -->
+    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="custom.css">
+    
+    <script src="js/bulma-extensions.min.js"></script>
+    
+    <!-- <link rel="stylesheet" href="easy-autocomplete.min.css"> -->
+    <!-- <link rel="stylesheet" href="easy-autocomplete.themes.min.css"> -->
+    <script src="jquery.autocomplete.min.js"></script>
+    
+    
+    
+<!-- <link rel="stylesheet" href="jquery.rtResponsiveTables.css"> -->
+<!-- <script src="jquery.rtResponsiveTables.min.js" type="text/javascript"></script> -->
+<script src="epi.js" type="text/javascript"></script>
+
+<script id="cir-headers" type="x-tmpl-mustache">
+<tr>
+	<th id="headercir">СIR<span class="header-tip" data-tooltip="Tooltip Text" data-tippy-content="CIR-код – уникальный идентификатор надписи в Своде."><i class="fas fa-info-circle has-text-grey-lighter"></i></span></th>
+	<th id="headerog">OG<span class="header-tip" data-tippy-content="Ссылка на веб-модель эпиграфического памятника. OG-код (уникальный идентификатор модели) присваивается только эпиграфическим памятникам, документированным методом бесконтактного трехмерного цифрового моделирования. Памятники утраченные и известные по публикациям, спискам или фотографиям не имеют OG-кода. Памятники, которые не могут быть документированы иначе как по частям (разбитые надгробные плиты,  надписи о росписи храмов, располагающиеся по внутреннему периметру четверика) могут иметь более одного OG-кода, при этом каждая из частей имеет свой OG-код. Веб-модель отличается от полноценной трехмерной полигональной модели пониженным разрешением."><i class="fas fa-info-circle has-text-grey-lighter"></i></span></th>
+	<th id="headeryr">Год</th>
+	<th id="headerphoto" class="nowrap"><div style="width:2rem;"><span class="header-tip" data-tippy-content="Растровое изображение  модели эпиграфического памятника."><i class="fas fa-info-circle has-text-grey-lighter"></i></span></div></th>
+	<th id="headerphoto2" class="nowrap"><div style="width:2rem;"><span class="header-tip" data-tippy-content="Растровое изображение модели эпиграфического памятника с отключенным цветом поверхности."><i class="fas fa-info-circle has-text-grey-lighter"></i></span></div></th>
+	<th id="headername" class="nowrap">Наименование надписи<span class="header-tip" data-tippy-content="Краткое описание эпиграфического памятника с указанием на его связь с конкретными лицами и событиями и датировку."><i class="fas fa-info-circle has-text-grey-lighter"></i></span></th>
+	<th id="headertranscript" class="nowrap">Практическая транскрипция<span class="header-tip" data-tippy-content="Воспроизведение надписи буквами современного кириллического алфавита с использованием Лейденской системы скобок."><i class="fas fa-info-circle has-text-grey-lighter"></i></span></th>
+	<th id="headerplace" class="nowrap">Местонахождение<span class="header-tip" data-tippy-content="Указано  фактическое местонахождение эпиграфического памятника на момент документирования."><i class="fas fa-info-circle has-text-grey-lighter"></i></span></th>
+</tr>
+<!-- &shy; -->
+</script>
+
+<script id="drop" type="x-tmpl-mustache">
+        <div class="dropdown is-hoverable dropbody">
+          <div class="dropdown-trigger">
+            <button class="button dropfilter" aria-haspopup="true" aria-controls="dropdown-menu4">
+              <!-- <span class="is-size-7">{{title}}</span> -->
+              <span class="abc">{{title}}<i class="fas fa-filter is-hidden userfilter"></i></span>
+              <!-- <span class="icon is-small"> -->
+                <!-- <i class="fas fa-angle-down" aria-hidden="true"></i> -->
+              <!-- </span> -->
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+            <div class="dropdown-content">
+            <div style="padding: 5px 15px 5px 15px;" data-feature="{{code}}">
+                <a class="filter-clean">Очистить все</a> ● <a class="filter-check">Выбрать все</a>
+            </div>
+            {{#items}}
+              <div class="dropdown-item">
+                <!-- <p>You can insert <strong>any type of content</strong> within the dropdown menu.</p> -->
+                <input class="is-checkradio filtering" data-feature="{{f}}" data-id="{{id}}" id="{{f}}{{id}}" type="checkbox" name="{{f}}{{id}}" checked="checked"><label for="{{f}}{{id}}">
+                {{#v}} {{v}} {{/v}}
+                {{^v}} <span style="color:gray;">(пусто)</span> {{/v}}
+            
+                
+                </label>
+              </div>
+            {{/items}}  
+            </div>
+          </div>
+        </div>    
+    
+</script>
+
+<script id="card" type="x-tmpl-mustache">
+ <section class="section">
+    <div class="container">
+      <h1 class="title">{{name}}</h1>
+	  <span class="nowrap">
+	  <input id="yearslider" class="timeslider has-output  slider is-fullwidth is-circle" step="1" min="1492" max="1701" value="1632" type="range">
+	  <output for="yearslider" id="yearslider-display" style="width:5rem;">1632</output>
+	  </span>
+	  
+      <h2 class="subtitle">
+        {{transcript}}
+      </h2>
+	  <div class="columns"><div class="column bold">CIR</div><div class="column">{{cir}}</div></div>
+	  <div class="columns"><div class="column bold">OG</div><div class="column">{{og}}</div></div>
+	  <div class="columns"><div class="column bold">Век</div><div class="column">{{xx}}</div></div>
+	  <div class="columns"><div class="column bold">Год</div><div class="column">{{yr}}</div></div>
+	  <div class="columns"><div class="column bold">CIR</div><div class="column">{{cir}}</div></div>
+		
+    </div>
+	
+  </section>
+    
+</script>
+
+
+
+</head>
+<body>
+
+ <section class="section">
+ <!-- <nav class="level"> -->
+  <!-- <div class="level-item has-text-centered"> -->
+    <!-- <div> -->
+      <!-- <p class="heading">Tweets</p> -->
+      <!-- <p class="title">3,456</p> -->
+    <!-- </div> -->
+  <!-- </div> -->
+  <!-- <div class="level-item has-text-centered"> -->
+    <!-- <div> -->
+      <!-- <p class="heading">Following</p> -->
+      <!-- <p class="title">123</p> -->
+    <!-- </div> -->
+  <!-- </div> -->
+  <!-- <div class="level-item has-text-centered"> -->
+    <!-- <div> -->
+      <!-- <p class="heading">Followers</p> -->
+      <!-- <p class="title">456K</p> -->
+    <!-- </div> -->
+  <!-- </div> -->
+  <!-- <div class="level-item has-text-centered"> -->
+    <!-- <div> -->
+      <!-- <p class="heading">Likes</p> -->
+      <!-- <p class="title">789</p> -->
+    <!-- </div> -->
+  <!-- </div> -->
+<!-- </nav> -->
+ 
+ <!-- Main container -->
+ 
+ <!-- <div class="container"> -->
+ 
+ <!-- </div> -->
+ <!-- <div class="container"> -->
+<nav class="level container">
+  <!-- Left side -->
+  
+  <div class="level-left">
+    <div class="level-item">
+    
+      <p class="subtitle is-5">
+        <!-- <strong class="count"></strong>  -->
+        <!-- надписей -->
+      </p>
+    </div>
+    <!-- <div class="level-item"> -->
+      <!-- <div class="field has-addons"> -->
+        <!-- <p class="control"> -->
+          <!-- <input class="input" type="text" placeholder="Найти что-нибудь"> -->
+        <!-- </p> -->
+        <!-- <p class="control"> -->
+          <!-- <button class="button"> -->
+            <!-- Поиск -->
+          <!-- </button> -->
+        <!-- </p> -->
+      <!-- </div> -->
+    <!-- </div> -->
+    <img src="CIRlogo.png" style="margin-left:-20px;"/>
+  </div>
+
+  <!-- Right side -->
+  <div class="level-right">
+    <p class="level-item"><a class="bold nav-ins">Надписи</a></p>
+    <p class="level-item"><a class="nav-loc">Местонахождения</a></p>
+    <!-- <p class="level-item"><a>Drafts</a></p> -->
+    <!-- <p class="level-item"><a>Deleted</a></p> -->
+    <!-- <p class="level-item"><a class="button is-success">New</a></p> -->
+  </div>
+</nav>
+ </div>
+ 
+ 
+<div class="container setup is-hidden" style="margin-bottom:1rem;">
+    
+
+  <!-- <h1 class="title"> -->
+    <!-- Свод русских надписей -->
+  <!-- </h1> -->
+  <!-- <p class="subtitle"> -->
+    
+  <!-- </p> -->
+  
+  <div class="columns">
+            <div class="column">
+				<span class="update has-text-grey"></span>			
+            </div>
+            <div class="column">
+			  <div class="field">
+			  <input id="switch-filters-id" type="checkbox" name="switch-filters-id" class="switch-filters switch colored-switch">
+			  <label for="switch-filters-id">Фильтры</label>
+			  </div>
+			</div>
+			<div class="column">
+				<span class="count"></span>			
+            </div>
+			<div class="column">
+				<div class="field">				
+				<span style="white-space:nowrap">
+				  <span style="margin:1em">
+					Сортировка
+				  </span>
+				  <input class="is-checkradio checksort" id="sort-id" type="radio" name="checksort" checked="checked"/>
+				  <label for="sort-id" style="padding-bottom:5px;">по номеру</label>
+				  
+				  <input class="is-checkradio checksort" id="sort-yr" type="radio" name="checksort"/>
+				  <label for="sort-yr" style="padding-bottom:5px;">по дате</label>			  
+				 </span>				 
+				</div>
+			</div>
+	</div>			
+			
+			
+
+</div>
+<!-- <div class="container" style="margin-bottom:1rem;"> -->
+
+<!-- </div> -->
+  
+   <!-- is-active -->
+   
+   <div id="modal-img" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <!-- <p class="image is-4by3"> -->
+        <p class="">
+          <!-- <img src="https://bulma.io/images/placeholders/1280x960.png" alt=""> -->
+          <img class="" src="https://cataas.com/cat" alt="" style="object-fit: contain;">
+        </p>
+      </div>
+      <button class="modal-close is-large cancel" aria-label="close"></button>
+    </div>
+	
+   <div class="single"></div>
+   
+  <div id="modal-ter" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Фото</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <div class="content">
+        <h1>Hello World</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan, metus ultrices eleifend gravida, nulla nunc varius lectus, nec rutrum justo nibh eu lectus. Ut vulputate semper dui. Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.</p>
+        <h2>Second level</h2>
+        <p>Curabitur accumsan turpis pharetra <strong>augue tincidunt</strong> blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti. Etiam mattis sem rhoncus lacus dapibus facilisis. Donec at dignissim dui. Ut et neque nisl.</p>
+        <ul>
+          <li>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
+          <li>Morbi eu nulla lobortis, lobortis est in, fringilla felis.</li>
+          <li>Aliquam nec felis in sapien venenatis viverra fermentum nec lectus.</li>
+          <li>Ut non enim metus.</li>
+        </ul>
+        <h3>Third level</h3>
+        <p>Quisque ante lacus, malesuada ac auctor vitae, congue <a href="#">non ante</a>. Phasellus lacus ex, semper ac tortor nec, fringilla condimentum orci. Fusce eu rutrum tellus.</p>
+        <ol>
+          <li>Donec blandit a lorem id convallis.</li>
+          <li>Cras gravida arcu at diam gravida gravida.</li>
+          <li>Integer in volutpat libero.</li>
+          <li>Donec a diam tellus.</li>
+          <li>Aenean nec tortor orci.</li>
+          <li>Quisque aliquam cursus urna, non bibendum massa viverra eget.</li>
+          <li>Vivamus maximus ultricies pulvinar.</li>
+        </ol>
+        <blockquote>Ut venenatis, nisl scelerisque sollicitudin fermentum, quam libero hendrerit ipsum, ut blandit est tellus sit amet turpis.</blockquote>
+        <p>Quisque at semper enim, eu hendrerit odio. Etiam auctor nisl et <em>justo sodales</em> elementum. Maecenas ultrices lacus quis neque consectetur, et lobortis nisi molestie.</p>
+        <p>Sed sagittis enim ac tortor maximus rutrum. Nulla facilisi. Donec mattis vulputate risus in luctus. Maecenas vestibulum interdum commodo.</p>
+        <p>Suspendisse egestas sapien non felis placerat elementum. Morbi tortor nisl, suscipit sed mi sit amet, mollis malesuada nulla. Nulla facilisi. Nullam ac erat ante.</p>
+        <h4>Fourth level</h4>
+        <p>Nulla efficitur eleifend nisi, sit amet bibendum sapien fringilla ac. Mauris euismod metus a tellus laoreet, at elementum ex efficitur.</p>
+        <p>Maecenas eleifend sollicitudin dui, faucibus sollicitudin augue cursus non. Ut finibus eleifend arcu ut vehicula. Mauris eu est maximus est porta condimentum in eu justo. Nulla id iaculis sapien.</p>
+        <p>Phasellus porttitor enim id metus volutpat ultricies. Ut nisi nunc, blandit sed dapibus at, vestibulum in felis. Etiam iaculis lorem ac nibh bibendum rhoncus. Nam interdum efficitur ligula sit amet ullamcorper. Etiam tristique, leo vitae porta faucibus, mi lacus laoreet metus, at cursus leo est vel tellus. Sed ac posuere est. Nunc ultricies nunc neque, vitae ultricies ex sodales quis. Aliquam eu nibh in libero accumsan pulvinar. Nullam nec nisl placerat, pretium metus vel, euismod ipsum. Proin tempor cursus nisl vel condimentum. Nam pharetra varius metus non pellentesque.</p>
+        <h5>Fifth level</h5>
+        <p>Aliquam sagittis rhoncus vulputate. Cras non luctus sem, sed tincidunt ligula. Vestibulum at nunc elit. Praesent aliquet ligula mi, in luctus elit volutpat porta. Phasellus molestie diam vel nisi sodales, a eleifend augue laoreet. Sed nec eleifend justo. Nam et sollicitudin odio.</p>
+        <h6>Sixth level</h6>
+        <p>Cras in nibh lacinia, venenatis nisi et, auctor urna. Donec pulvinar lacus sed diam dignissim, ut eleifend eros accumsan. Phasellus non tortor eros. Ut sed rutrum lacus. Etiam purus nunc, scelerisque quis enim vitae, malesuada ultrices turpis. Nunc vitae maximus purus, nec consectetur dui. Suspendisse euismod, elit vel rutrum commodo, ipsum tortor maximus dui, sed varius sapien odio vitae est. Etiam at cursus metus.</p>
+        </ul>
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success">Save changes</button>
+      <button class="button cancel">Cancel</button>
+    </footer>
+  </div>
+</div>
+
+  
+  
+ <!-- <div class="container"> -->
+  <!-- <div class="notification"> -->
+    <!-- This container is <strong>centered</strong> on desktop. -->
+  <!-- </div> -->
+<!-- </div> -->
+
+    
+  <div class="container is-hidden" style="margin-top: 1em; margin-bottom: 1em;">
+    <!-- is-small  -->
+    <button class="button toggle-filters"><span class="filters-show">Показать</span><span class="filters-hide is-hidden">Скрыть</span><span>&nbsp;дополнительные фильтры</span></button>
+
+    
+    
+  </div>
+   <!--  -->
+   <!-- <div class="container cyr">поелику</div> -->
+   
+    <div class="container filters2 is-hidden" style="margin-top: 1em; margin-bottom: 1em;">
+	<div class="columns">
+	  <div class="column is-one-fifth xx">Век</div>
+	  <div class="column is-three-fifths">Слайдер</div>
+	  <div class="column is-one-fifth">Место</div>
+	</div>
+	
+	<div class="columns">
+	  <div class="column">Тип памятника</div>
+	  <div class="column">Содержание надписи</div>
+	  <div class="column">Материал носителя</div>
+	  <div class="column">Способ изготовления</div>
+	  <div class="column">Место</div>
+	</div>
+
+	
+        <div class="columns">
+            <div class="column fcol0">
+            <!-- First column -->
+            </div>
+            <div class="column fcol1">
+            <!-- Second column -->
+            </div>
+            <div class="column fcol2">
+            <!-- Third column -->
+            </div>
+            <div class="column fcol3">
+            <!-- Fourth column -->
+            </div>
+            <div class="column fcol4">
+            <!-- Fifth column -->
+            </div>
+            <div class="column fcol5">
+            <!-- Sixth column -->
+				<button class="button is-light dropfilter all-clear dropbody"  style="color:#e43e39;">Сбросить все фильтры</button>
+				<!-- <div class="is-size-6 has-text-centered has-text-weight-bold" style="margin-bottom: 1.15rem;margin-top:3.6rem;">Местонахождение</div> -->
+				<!-- <div class="is-size-6 has-text-centered has-text-weight-bold" style="margin-bottom: 1rem;margin-top:1.25rem;">Местонахождение</div> -->
+				<button class="button dropfilter dropbody is-static is-white" style="border:none;color:black;font-weight:bold;background-color:inherit;">Местонахождение</button>
+				<div class="field has-addons  dropfilter dropbody">
+				  <div class="control">
+					<!-- <input class="input" type="text" placeholder="Find a repository"> -->
+					<input class="input place-finder red" type="text" placeholder="Поиск по части слова" /> 
+				  </div>
+				  <div class="control">
+					<a class="button is-info clear-place">
+					  <i class="fas fa-trash"></i>
+					</a>
+				  </div>
+				</div>
+            </div>
+        </div>
+    </div>
+  
+<div class="container is-hidden" style="margin-top: 1em; margin-bottom: 1em;">  
+    <div class="field filters3">
+    
+    <!--  -->
+      <input class="is-checkradio" id="check-all" type="radio" name="checkfilters" checked="checked"/>
+      <label for="check-all">Все</label>
+      
+      
+      <input class="is-checkradio" id="check-undesc" type="radio" name="checkfilters"/>
+      <label for="check-undesc">Без описаний</label>
+      
+      
+      
+      
+      <!-- <input class="is-checkradio" id="exampleRadioInline2" type="radio" name="exampleRadioInline"> -->
+      <!-- <label for="exampleRadioInline2">Документированные</label> -->
+
+      <!-- <input class="is-checkradio" id="exampleRadioInline2" type="radio" name="exampleRadioInline"> -->
+      <!-- <label for="exampleRadioInline2">Ранее не публиковавшиеся</label> -->
+      
+      <!-- 1) «Не показывать надписи с описаниями»  - выводятся надписи, для которых не заполнено поле Наименование надписи. -->
+    <!-- 2) «Не показывать надписи без описаний» - выводятся надписи, для которых заполнено поле Наименование надписи. -->
+    <!-- 3) «Показывать только документированные надписи» - выводятся надписи, для которых заполнено поле OG. -->
+    <!-- 4) «Показывать только сохранившиеся надписи» - выводятся надписи, для которых поле Сохранность надписи не заполнено. -->
+    <!-- 5) «Показывать только утраченные надписи» - выводятся надписи, для которых в поле Сохранность надписи значится – «не сохранилась» -->
+    <!-- 6) «Показывать только ранее не публиковавшиеся надписи» - выводятся надписи, для которых в поле Публикация надписи значится – «публикуется впервые». -->
+    <!-- 7) «Не показывать фрагменты и сильно поврежденные надписи» - выводятся надписи, для которых в поле Сохранность носителя значится – «фрагмент». -->
+
+      
+      
+    </div>
+</div>
+	  
+    <div class="container">      
+        <!-- is-narrow is-striped -->
+        <table class="cirtable table  is-bordered   is-hoverable is-fullwidth">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    
+    <div class="container">      
+        <table class="loctable is-hidden table  is-bordered is-striped  is-hoverable">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</section>
+  
+  
+
+<footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      © 2020, <strong>Свод русских надписей</strong> 
+    </p>
+  </div>
+</footer>
+</body>
+</html>
