@@ -49,13 +49,15 @@ async function importSheet(db, options) {
     const mapRuEn = {};
     const mapEnRu = {};
     
+	let inserts = "";
     for (let x = 0; x < mapArr.length; x++) {
-        let [ru, en, ...rest] = mapArr[x];
+        let [ru, en, title, ...rest] = mapArr[x];
         mapRuEn[ru] = en;
         mapEnRu[en] = ru;
-        // console.log("==",mapArr[x]);
+		inserts += `INSERT INTO ${table}_fields (name_in, name_code, name_out) VALUES('${ru}', '${en}', '${title||ru}');`
+        // console.log(`${en} | ${title||ru}`);
+		// console.log(inserts);
     }
-    
   
     // console.log(bb);
     // console.log(mapEnRu);
@@ -66,12 +68,21 @@ async function importSheet(db, options) {
     const scheme = `
         DROP TABLE IF EXISTS ${table}; 
         DROP TABLE IF EXISTS ${table}_features; 
+        DROP TABLE IF EXISTS ${table}_fields; 
         CREATE TABLE ${table} (id INTEGER PRIMARY KEY, ${Object.keys(mapEnRu).join(" TEXT, ")} TEXT);
         CREATE TABLE ${table}_features (
             id   INTEGER PRIMARY KEY,
             f TEXT,
             v TEXT
-        )`;
+        );
+        CREATE TABLE ${table}_fields (
+            id   INTEGER PRIMARY KEY,
+            name_in TEXT,
+            name_code TEXT,
+			name_out TEXT
+        );
+		${inserts}`
+		;
         
     // console.log(scheme);  
     // return
