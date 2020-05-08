@@ -6,35 +6,35 @@ const csv = require('async-csv');
 const sqlite = require('better-sqlite3');
 
 function processRow(datacolumns, len){
-	let realdata  = "";
-	const datum = [];
-	
-	for (let i = 0; i < len; i++) {
-		const c  = datacolumns[i];
-		let content = "";
-		
+    let realdata  = "";
+    const datum = [];
+    
+    for (let i = 0; i < len; i++) {
+        const c  = datacolumns[i];
+        let content = "";
+        
         if (Reflect.getOwnPropertyDescriptor(c, "effectiveValue")) {
              
-				const v = c["userEnteredValue"];
-				// https://rdrr.io/github/bradgwest/googleSheetsR/man/ExtendedValue.html
-				content = v["stringValue"] || v["numberValue"];
-				
-				if (content !== c["formattedValue"]){
-					content = '#' + content;
-				}
-				content = c["formattedValue"];
+                const v = c["userEnteredValue"];
+                // https://rdrr.io/github/bradgwest/googleSheetsR/man/ExtendedValue.html
+                content = v["stringValue"] || v["numberValue"];
+                
+                if (content !== c["formattedValue"]){
+                    content = '#' + content;
+                }
+                content = c["formattedValue"];
                 // if (i === 28){
                     // const res = content.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})[\s\.\,]/);
                     // // let new_content = res?`${res[3]}-${res[2]}-${res[1]}`: "FAIL "+content;
                     // let new_content = res?`${res[3]}-${res[2]}-${res[1]}`: '';
                     // console.log(datum[0]+"\t"+new_content);
                 // }
-		} 
+        } 
         
-		datum[i] = content;
-		if (content){ realdata += content; }
-	}
-	return realdata ? datum : [];
+        datum[i] = content;
+        if (content){ realdata += content; }
+    }
+    return realdata ? datum : [];
 }
 
 
@@ -49,14 +49,14 @@ async function importSheet(db, options) {
     const mapRuEn = {};
     const mapEnRu = {};
     
-	let inserts = "";
+    let inserts = "";
     for (let x = 0; x < mapArr.length; x++) {
-        let [ru, en, title, ...rest] = mapArr[x];
+        let [ru, en, title] = mapArr[x]; // , ...rest
         mapRuEn[ru] = en;
         mapEnRu[en] = ru;
-		inserts += `INSERT INTO ${table}_fields (name_in, name_code, name_out) VALUES('${ru}', '${en}', '${title||ru}');`
+        inserts += `INSERT INTO ${table}_fields (name_in, name_code, name_out) VALUES('${ru}', '${en}', '${title||ru}');`;
         // console.log(`${en} | ${title||ru}`);
-		// console.log(inserts);
+        // console.log(inserts);
     }
   
     // console.log(bb);
@@ -79,10 +79,9 @@ async function importSheet(db, options) {
             id   INTEGER PRIMARY KEY,
             name_in TEXT,
             name_code TEXT,
-			name_out TEXT
+            name_out TEXT
         );
-		${inserts}`
-		;
+        ${inserts}`;
         
     // console.log(scheme);  
     // return
@@ -196,7 +195,7 @@ async function importSheet(db, options) {
     
         let uniq = "";
         
-        for (let [key, value] of Object.entries(big)) {	
+        for (let [key, value] of Object.entries(big)) { 
             fs.writeFileSync(path.join("all", key+'.txt'), value.join("\n"));
             uniq += "\n\n♦ " + key + " [" + mapEnRu[key] + "]\n" + [...new Set(value)].join("\n");
         }
