@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Свод русских надписей</title>
+	<meta name="author" content="Alyaxey Yaskevich">
+	<link rel="icon" type="image/png" href="omega-150x150.png" sizes="32x32" />
+	<link rel="stylesheet" href="bulma.custom.css">
+	<script src="jquery.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@creativebulma/bulma-collapsible@1.0.3/dist/css/bulma-collapsible.min.css" /> ■
+	<style type="text/css">
+	html,
+	img {
+		padding: 5px;
+		border: 1px solid #ccc;
+	}
+	
+	.fix {
+		color: gray;
+	}
+	
+	.sticky {
+		position: sticky;
+		top: 30px;
+	}
+	
+	.sb {
+		background-color: #fafafa;
+	}
+	</style>
+</head>
+
+<body>
+	<section class="hero is-fullheight is-default is-bold">
+		<div class="hero-head is-invisible">
+			<nav class="navbar">
+				<div class="container">
+					<div class="navbar-brand">
+						<a class="navbar-item" href="../"> <img src="bulma.png" alt="Logo"> </a> <span class="navbar-burger burger" data-target="navbarMenu">
+                            <span></span> <span></span> <span></span> </span>
+					</div>
+					<div id="navbarMenu" class="navbar-menu">
+						<div class="navbar-end">
+							<div class="tabs is-right">
+								<ul>
+									<li class="is-active"><a>Home</a></li>
+									<li><a href="">Examples</a></li>
+									<li><a href="">Features</a></li>
+									<li><a href="">Team</a></li>
+									<!-- <li><a href="">Help</a></li> -->
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</nav>
+		</div>
+		<div class="hero-body">
+			<div class="container">
+				<div id="here" class="columns">
+					<div class="column is-three-quarters">
+						<h1 id="description" class="title is-3 naming"></h1>
+						<div class="columns">
+							<div class="column is-5">
+								<figure class="image"> <img class="photo" alt="фото" onerror="this.onerror=null; this.src='default.png'"> </figure>
+								<br>
+								<!-- church -->
+								<p><span class="icon"><i class="fas fa-sign"></i></span>&nbsp;<span class="story"><span></p>
+								<p><span class="icon"><i class="fas fa-map-marker-alt"></i></span>&nbsp;<span class="place"><span></p>
+							</div>
+							<div class="column is-6 is-offset-1">
+
+
+								<!-- <h1 class="title is-5 naming">Superhero Scaffolding</h1> -->
+								<!-- <hr/> -->
+								<!-- <hr/> -->
+								<br/>
+								
+								<!-- <h1 class="title is-6 has-text-centered">Транскрипция</h1> -->
+								
+								<div id="transcription">
+								<p class="has-text-centered title is-6">Tранскрипция</p>
+								<div class="tabs is-centered is-boxed">
+								  <ul>
+									<li class="is-active trans-pract"><a>Практическая</a></li>
+									<li class="trans-orig"><a>Оригинальная</a></li>
+									
+								  </ul>
+								</div>
+								</div>
+								
+								<p class="subtitle is-5 box">
+									<span class="readable"></span> <span class="transcript is-hidden"></span> </p>
+								<!-- <hr/> -->
+								<!-- <br> -->
+							</div>
+						</div>
+						<div class="content">
+							<div class="box is-hidden">
+								<h2 id="paleography" class="title is-3">Палеографический комментарий</h2>
+								<p class="com_paleo"></p>
+							</div>
+							<div class="box is-hidden">
+								<h2 id="philology" class="title is-3">Филологический комментарий</h2>
+								<p class="com_phil"></p>
+							</div>
+							<div class="box is-hidden">
+								<h2 id="textology" class="title is-3">Текстологический комментарий</h2>
+								<p class="com_text"></p>
+							</div>
+							<div class="box is-hidden">
+								<h2 id="history" class="title is-3">Исторический комментарий</h2>
+								<p class="com_hist"></p>
+							</div>
+							<div class="box is-hidden">
+								<h2 id="metadata" class="title is-3">Публикации</h2>
+								<p class="pubs"></p>
+							</div>
+						</div>
+					</div>
+					<div class="column sb">
+						<div class="menu sticky">
+							<p class="menu-label"><b>Навигация</b></p>
+							<ul id="menu" class="menu-list">
+								<li><a href="#description">Фото и описание</a></li>
+								<li><a href="#transcription">Транскрипция</a></li>
+								<li><a id="com_paleo" href="#paleography">Палеографический комментарий</a></li>
+								<li><a id="com_phil" href="#philology">Филологический комментарий</a></li>
+								<li><a id="com_text"  href="#textology">Текстологический комментарий</a></li>
+								<li><a id="com_hist" href="#history">Исторический комментарий</a></li>
+								<li><a id="pubs"  href="#metadata">Публикации</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="columns">
+				<div class="column is-5">
+					<figure class="image"> <img class="photo" alt="фото" onerror="this.onerror=null; this.src='default.png'"> </figure>
+				</div>
+				<div class="column is-6 is-offset-1">
+					<!-- <h1 class="title is-5 naming">Superhero Scaffolding</h1> -->
+					<!-- <hr/> -->
+					<h2 class="subtitle is-5 readable">
+									Let this cover page describe a product or service.
+								</h2>
+					<hr/>
+					<br>
+					<!-- church -->
+					<p><span class="icon"><i class="fas fa-map-signs"></i></span>&nbsp;<span class="story"><span></p>
+								<p><span class="icon"><i class="fas fa-map-marker-alt"></i></span>&nbsp;<span class="place"><span></p>
+
+							</div>
+</div>
+</div>
+
+        <div class="hero-foot is-hidden">
+            <div class="container">
+                <div class="tabs is-centered">
+                    <ul>
+                        <li><a>© Свод русских надписей, 2020</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+	<script src="bulma-collapsible.min.js"></script>	
+	<script src="bulma.js"></script>
+    
+	<!-- <script src="https://cdn.jsdelivr.net/npm/@creativebulma/bulma-collapsible@1.0.3/dist/js/bulma-collapsible.min.js"></script> -->
+	<!-- <script src="https://demo.creativebulma.net/components/bulma-collapsible/1.0/lib/index.js"></script> -->
+	  <!-- Load Font Awesome 5 -->
+  <!-- <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js"></script> -->
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>
+            © 2020, <strong class="project-title">Свод русских надписей</strong>
+        </p>
+    </div>
+</footer>
+</body>
+</html>

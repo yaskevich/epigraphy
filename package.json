@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "echo \"started\"",
+    "start": "node index.js",
     "css-build": "node-sass --omit-source-map-url cir.sass public/bulma.custom.css --output-style compressed",
     "css-watch": "npm run css-build -- --watch"
   },
@@ -33,7 +33,7 @@
     "better-sqlite3": "^6.0.1",
     "bowser": "^2.9.0",
     "bulma-extensions": "^6.2.7",
-    "config": "^3.3.0",
+    "config": "^3.3.1",
     "csvtojson": "^2.0.10",
     "devbridge-autocomplete": "^1.4.11",
     "express": "^4.17.1",

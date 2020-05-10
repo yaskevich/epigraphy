@@ -48,15 +48,23 @@
 <tbody>
 {{#records}}
 	<tr data-yr="{{ymin}}" data-id="{{id}}" id="id{{id}}">
-		<td class="cir">{{cir}}</td>
+		<td class="cir">
+			{{#fn}}
+				<!-- <span class="tag is-white show-3d" data-tippy-content="3D-модель">{{.}}</span> -->
+				<!-- <span class="is-link">{{cir}}</span> -->
+				<a href="/{{cir}}" target="_blank" title="{{fn}}">{{cir}}</a>
+			{{/fn}}
+			{{^fn}}
+				<span class='red' data-tippy-content="Файл описания отсутствует">{{cir}}</span>
+			{{/fn}}
+		</td>
 		<td class="og has-text-centered">
-		{{#ogs}}
-			<span class="tag is-white show-3d" data-tippy-content="3D-модель">{{.}}</span>
-		{{/ogs}}
-		{{^ogs}}
-			<span class='red'>{{og}}</span>
-		{{/ogs}}
-
+			{{#ogs}}
+				<button class="button show-3d is-small" data-tippy-content="3D-модель">{{.}}</button>
+			{{/ogs}}
+			{{^ogs}}
+				<span class='red'>{{og}}</span>
+			{{/ogs}}
 		</td>
 		<td class="yr">{{#yr}}{{yr}}{{/yr}}{{^yr}}<span class='red'>▪</span>{{/yr}}</td>
 		<td>
