@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
+    "sync": "node scripts/download-sheets.js && node scripts/import-sheets.js",
     "css-build": "node-sass --omit-source-map-url cir.sass public/bulma.custom.css --output-style compressed",
     "css-watch": "npm run css-build -- --watch"
   },
@@ -45,6 +46,7 @@
     "leaflet-modal": "^0.1.5",
     "materialize-css": "^1.0.0-rc.2",
     "mustache": "^4.0.1",
+    "nouislider": "^14.5.0",
     "persistent-cache": "^1.1.1",
     "pino": "^5.17.0",
     "pino-multi-stream": "^5.0.0",

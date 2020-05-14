@@ -4,8 +4,9 @@ const fs = require('fs');
 // const archiver = require('archiver');
 const {google} = require('googleapis');
 const path = require('path');
+const config = require('config');
 
-// https://github.com/googleapis/google-api-nodejs-client/blob/197b0199a14c7ae05045a8f2f7ad185ada9210ad/samples/sheets/quickstart.js
+//  https://github.com/googleapis/google-api-nodejs-client/blob/197b0199a14c7ae05045a8f2f7ad185ada9210ad/samples/sheets/quickstart.js
 
 // Error: The service is currently unavailable.
     // at Request._callback (\google-auth-librar
@@ -37,13 +38,13 @@ const path = require('path');
 let isAuthorized = false;
 
 
-async function getSheet(keyFile, id) {
+async function getSheet(keyPath, id) {
     if (id) {
         const sheet_defaults = { "range":"A:ZZZ", "filepath": '', 'justget': false, 'full': false};
-        if (!isAuthorized && keyFile) {
+        if (!isAuthorized && keyPath) {
             
             const auth = new google.auth.GoogleAuth({
-                keyFile: path.isAbsolute(keyFile) ? keyFile :  path.join( __dirname, keyFile),
+                keyFile: keyPath,
                 scopes: 'https://www.googleapis.com/auth/spreadsheets.readonly',
               });
             const client = await auth.getClient();
@@ -97,10 +98,11 @@ async function getSheet(keyFile, id) {
     return {};
 }
 
-const docID = '1foslhreAi1LTBBtvq7eKWaB_3BbSbXgMFR2FQ8T9GR4';
-// docID = '1VsgFeOy_1b0PTy_-In6Ggo31rfoQRrkx_Us-mrWNXcE';
 (async () => {
-    const res = await getSheet('test-project-d2d9a98b6b4e.json', docID);
+    const cfg = config.get('app');
+    const appDir = path.join(__dirname, ".."); //__dirname
+    const keyPath = path.join(appDir, ...cfg.keyFile); 
+    const res = await getSheet(keyPath, cfg.docID);
     if (Reflect.getOwnPropertyDescriptor(res, "error")) {
         console.log(res.error);
     }

@@ -19,6 +19,8 @@
 <script src="mustache.js"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@15.1.1/dist/lazyload.min.js"></script> -->
 <script src="lazyload.js"></script>
+<script src="nouislider.min.js"></script>
+<link rel="stylesheet" href="nouislider.min.css">
 <script src="js/bulma-extensions.min.js"></script>
 <script src="jquery.autocomplete.min.js"></script>
 <script src="data.js" type="text/javascript"></script>
@@ -34,7 +36,7 @@
 <script id="cirtablesource" type="x-tmpl-mustache">
 <thead>
 <tr>
-	<th id="header-cir">СIR<span class="header-tip" data-tooltip="Tooltip Text" data-tippy-content="CIR-код – уникальный идентификатор надписи в Своде."><i class="fas fa-info-circle has-text-grey-lighter"></i></span></th>
+	<th id="header-cir">СIR<span class="header-tip" data-tooltip="Tooltip Text" data-tippy-content="CIR-код – уникальный идентификатор эпиграфического памятника в Своде."><i class="fas fa-info-circle has-text-grey-lighter"></i></span></th>
 	<th id="header-og">OG<span class="header-tip" data-tippy-content="Ссылка на веб-модель эпиграфического памятника. OG-код (уникальный идентификатор модели) присваивается только эпиграфическим памятникам, документированным методом бесконтактного трехмерного цифрового моделирования. Памятники утраченные и известные по публикациям, спискам или фотографиям не имеют OG-кода. Памятники, которые не могут быть документированы иначе как по частям (разбитые надгробные плиты,  надписи о росписи храмов, располагающиеся по внутреннему периметру четверика) могут иметь более одного OG-кода, при этом каждая из частей имеет свой OG-код. Веб-модель отличается от полноценной трехмерной полигональной модели пониженным разрешением."><i class="fas fa-info-circle has-text-grey-lighter"></i></span></th>
 	<th id="header-yr">Год</th>
 	<th id="header-photo" class="nowrap"><div class="photocell"><span class="header-tip" data-tippy-content="Растровое изображение  модели эпиграфического памятника."><i class="fas fa-info-circle has-text-grey-lighter"></i></span></div></th>
@@ -52,24 +54,26 @@
 			{{#fn}}
 				<!-- <span class="tag is-white show-3d" data-tippy-content="3D-модель">{{.}}</span> -->
 				<!-- <span class="is-link">{{cir}}</span> -->
-				<a href="/{{cir}}" target="_blank" title="{{fn}}">{{cir}}</a>
+				<a data-tippy-content="Открыть описание эпиграфического памятника" href="/{{cir}}" target="_blank">{{cir}}</a>
 			{{/fn}}
 			{{^fn}}
-				<span class='red' data-tippy-content="Файл описания отсутствует">{{cir}}</span>
+				<!-- <span class='red' data-tippy-content="Файл описания отсутствует">{{cir}}</span> -->
+				<span data-tippy-content="Описание в разработке">{{cir}}</span>
 			{{/fn}}
 		</td>
 		<td class="og has-text-centered">
 			{{#ogs}}
-				<button class="button show-3d is-small" data-tippy-content="3D-модель">{{.}}</button>
+				<!-- <button class="button show-3d" data-tippy-content="3D-модель">{{.}}</button> -->
+                <a class="show-3d" href="#" data-tippy-content="3D-модель" title="{{fn}}">{{.}}</a>
 			{{/ogs}}
 			{{^ogs}}
-				<span class='red'>{{og}}</span>
+				<span>{{og}}</span>
 			{{/ogs}}
 		</td>
 		<td class="yr">{{#yr}}{{yr}}{{/yr}}{{^yr}}<span class='red'>▪</span>{{/yr}}</td>
 		<td>
 		{{#ogs.0}}
-			<img class="preview lazy" src="200px-No_sign.svg.png" data-src="XY_72px\{{ogs.0}}X.jpg" onerror="this.onerror=null; this.src='200px-No_sign.svg.png'">
+			<img class="preview lazy" data-src="XY_72px\{{ogs.0}}X.jpg" onerror="this.remove();">
 		{{/ogs.0}}
 		{{^ogs.0}}
 			<span class='red'>▪</span>
@@ -77,7 +81,7 @@
 		</td>
 		<td>
 		{{#ogs.0}}
-			<img class="preview lazy" src="200px-No_sign.svg.png" data-src="XY_72px\{{ogs.0}}Y.jpg" onerror="this.onerror=null; this.src='200px-No_sign.svg.png'">
+			<img class="preview lazy" data-src="XY_72px\{{ogs.0}}Y.jpg" onerror="this.remove();">
 		{{/ogs.0}}
 		{{^ogs.0}}
 			<span class='red'>▪</span>
@@ -131,7 +135,6 @@
 	  <div class="columns"><div class="column bold">Год</div><div class="column">{{yr}}</div></div>
 	  <div class="columns"><div class="column bold">CIR</div><div class="column">{{cir}}</div></div>
     </div>
-	<button class="mesh">show</button>
   </section>
 </script>
 </head>
@@ -196,8 +199,9 @@
 
         <!-- Right side -->
         <div class="level-right">
-            <p class="level-item"><a class="bold nav-ins">Надписи</a></p>
-            <p class="level-item"><a class="nav-loc">Местонахождения</a></p>
+            <p class="level-item"><a class="nav-item bold nav-ins">Надписи</a></p>
+            <p class="level-item"><a class="nav-item nav-loc">Местонахождения</a></p>
+            <p class="level-item"><a class="nav-item nav-project">О проекте</a></p>
             <!-- <p class="level-item"><a>Drafts</a></p> -->
             <!-- <p class="level-item"><a>Deleted</a></p> -->
             <!-- <p class="level-item"><a class="button is-success">New</a></p> -->
@@ -223,13 +227,13 @@
                 <div class="field">
                     <span class="nowrap">
 				  <span class="sorting">
-					Сортировка
+					Расположить
 				  </span>
 				    <input class="is-checkradio checksort" id="sort-yr" type="radio" name="checksort" />
-                    <label for="sort-yr">по дате</label>
+                    <label for="sort-yr">по датировке</label>
 					
                     <input class="is-checkradio checksort" id="sort-id" type="radio" name="checksort" checked="checked" />
-                    <label for="sort-id">по номеру</label>
+                    <label for="sort-id">по CIR<span class="header-tip" data-tooltip="Tooltip Text" data-tippy-content="CIR-код – уникальный идентификатор эпиграфического памятника в Своде."><i class="fas fa-info-circle has-text-grey-lighter"></i></span></label>
 
  
                     </span>
@@ -242,9 +246,9 @@
 
         <div class="columns">
             <div class="column is-one-fifths xx"></div>
-            <div class="column is-three-fifths">
-
-                <div class="nowrap slider-box" data-tippy-content="">
+            <div class="column is-three-fifths slider-column">
+                <div id="slider"></div>
+                <div class="nowrap slider-box is-hidden">
                     <input id="yearslider" class="timeslider has-output  slider is-circle" step="1" min="1492" max="1701" value="1500" type="range">
                     <output for="yearslider" id="yearslider-display" class="out">1632</output>
                 </div>
@@ -269,7 +273,7 @@
             <div class="column lang"></div>
             <div class="column orn"></div>
             <div class="column inscond "></div>
-            <div class="column">
+            <div class="column dropfilter">
                 <div class="field has-addons">
                     <div class="control">
                         <!-- <input class="input" type="text" placeholder="Find a repository"> -->

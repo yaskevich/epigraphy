@@ -10,6 +10,7 @@ $(function() {
 
         var hiddens = [];
         var filtersDisabled = {};
+        var slideControl;
 
         function showCount() {
             $('.count').html(data.records.length - hiddens.length + " из " + data.records.length);
@@ -45,13 +46,13 @@ $(function() {
             });
             showCount();
         }
-		function initSlider(){
-			$('#yearslider')
-				.attr("min", data.meta.years[0])
-				.attr("max", data.meta.years[1])
-				.val(data.meta.years[1])
-				.next().text(data.meta.years[1]);
-		}
+		// function initSlider(){
+			// $('#yearslider')
+				// .attr("min", data.meta.years[0])
+				// .attr("max", data.meta.years[1])
+				// .val(data.meta.years[1])
+				// .next().text(data.meta.years[1]);
+		// }
         // init controls
         $('input:radio[name="checksort"]#sort-yr').click();
         $('input:radio[name="checkfilters"]#check-all').click(); // .attr('checked', true);        
@@ -129,20 +130,16 @@ $(function() {
             $(this).parents().eq(3).find('div.dropdown-trigger > button.button > span > .fa-filter')[method]('is-hidden');
             applyFilters(data.records);
         }).on('change', '.timeslider', function(event) {
-            var newv = $(this).val();
-            $(this).next().text(newv);
+            // var newv = $(this).val();
+            // $(this).next().text(newv);
 			
-			filtersDisabled["ymin"] = jQuery.grep(data.meta.ymins, function(value) {
-                    return ((value > newv) && (value != 2000));
-            });
+			// filtersDisabled["ymin"] = jQuery.grep(data.meta.ymins, function(value) {
+                    // return ((value > newv) && (value != 2000));
+            // });
 			
-            console.log("slide", newv, filtersDisabled["ymin"].length);
-			// console.log(filtersDisabled["ymin"]);
-			applyFilters(data.records);
-			// console.log(filtersDisabled);
-			// alert("тест: "+newv);
-			
-			$('.slider-box')[newv == $(this).attr("max") ? 'removeClass': 'addClass']("box-active");
+            // console.log("slide", newv, filtersDisabled["ymin"].length);
+			// applyFilters(data.records);
+			// $('.slider-box')[newv == $(this).attr("max") ? 'removeClass': 'addClass']("box-active");
         }).on("click", "img.preview", function() {
 			var mini = $(this).data("src");			
 			if (mini){
@@ -163,7 +160,8 @@ $(function() {
             $('.filtering').prop('checked', true);
             $('.place-finder').val('');
 			$('.clear-place').removeClass("red-back");
-			initSlider();
+			// initSlider();
+            slideControl.reset();
             applyFilters(data.records);
         }).on("click", ".filter-clean,.filter-check", function() {
             var cls = $(this).attr("class");
@@ -202,8 +200,8 @@ $(function() {
             $('.column.' + key).html(view);
 		});
 		
-        initSlider();
-		$('#yearslider').attr("data-tippy-content", "Выберите год от " + data.meta.years[0] + " до " + data.meta.years[1] + ". Если год больше выбранного, запись не отображается");
+        // initSlider();
+		// $('#yearslider').attr("data-tippy-content", "Выберите год от " + data.meta.years[0] + " до " + data.meta.years[1] + ". Если год больше выбранного, запись не отображается");
         showCount();
 		$('.update').html(data.meta.update);
         $(".cirtable").append(Mustache.render($('#cirtablesource').html(), data));
@@ -255,11 +253,49 @@ $(function() {
         };
 
         $(".place-finder").autocomplete(options);
+        
+            
+        slideControl = noUiSlider.create($('#slider')[0], {
+            start: [data.meta.years[0], data.meta.years[1]],
+            connect: true,
+            tooltips: [true, true],
+            range: {
+                'min': data.meta.years[0],
+                'max': data.meta.years[1]
+            },
+              format: {
+                // 'to' the formatted value. Receives a number.
+                to: function (value) {
+                    return Math.round(value);
+                },
+                // 'from' the formatted value.
+                // Receives a string, should return a number.
+                from: function (value) {
+                    return Number(value);
+                }
+            }
+        });
+        
+        slideControl.on('change', function (limits, handle) {
+            
+            filtersDisabled["ymin"] = jQuery.grep(data.meta.ymins, function(value) {
+                    return ((value && value < limits[0]) || value > limits[1]);
+            });
+			
+            // console.log("slide", limits, filtersDisabled["ymin"].length);
+			// console.log(filtersDisabled["ymin"]);
+			applyFilters(data.records);
+            
+        });
+                
 
         tippy('[data-tippy-content]', {
             "placement": 'bottom',
             "maxWidth": 260
         });
+        
+        
+        
 		var lazyLoadInstance = new LazyLoad({ elements_selector: ".lazy" });
 		lazyLoadInstance.update();
     }
@@ -270,7 +306,7 @@ $(function() {
 		// single
 		var rendered = Mustache.render($('#card').html(), data.records[0]);
 		$('.single').html(rendered);
-		$('#modal-3d.modal').addClass("is-active");
+		// $('#modal-3d.modal').addClass("is-active");
 	}
 	
 });

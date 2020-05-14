@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const config = require('config');
 const cache = require('persistent-cache')();
 const Database = require('better-sqlite3');
 const express = require('express');
@@ -20,27 +21,28 @@ const prettyStream = pinoms.prettyStream({
     ignore: "hostname,pid" // add 'time' to remove timestamp
   }
 });
-var streams = [ {stream: fs.createWriteStream('app.log', {flags:'a'}) }, {stream: prettyStream } ];
+var streams = [{stream: fs.createWriteStream('app.log', {flags:'a'}) }, {stream: prettyStream }];
 var logger = pinoms(pinoms.multistream(streams));
 const app = express();
+const cfg = config.get('app');
 // const cfg = pr.init();
-const port = 7528; // cfg.front.port;
-const dbFile = "cir.db";
-const dataFile = "corpus.json";
+const port = cfg.server.port; // cfg.front.port;
+const dbFile = path.join(__dirname, cfg.dbName);
+const dataFile = path.join(__dirname, cfg.sourceFile);
 const translations = {
     "empty": "(пусто)"
 };
 // let db = new Database(dbFile, { verbose: console.log });
 let db = new Database(dbFile);
 
-const groupBy = key => array =>
-  array.reduce((objectsByKeyValue, obj) => {
-    const value = obj[key];
-    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-    return objectsByKeyValue;
- }, {});
+// const groupBy = key => array =>
+  // array.reduce((objectsByKeyValue, obj) => {
+    // const value = obj[key];
+    // objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+    // return objectsByKeyValue;
+ // }, {});
  
-const groupByField = groupBy('id');
+// const groupByField = groupBy('id');
 
 // const feats = db.prepare('SELECT * from features').all();
 
@@ -67,11 +69,11 @@ const places_fields = db.prepare('SELECT * from places_fields').all();
 let yearsRange = [];
 for (let i in records){
     const rec = records[i];
-    const year = rec.yr ? rec.yr.substring(0, 4) : 2000;
+    const year = rec.yr ? rec.yr.substring(0, 4) : 0;
     rec["ymin"] = year;
     
-    if (rec.og && rec.og.match(/[og\d\,\s]+/i)){
-        rec["ogs"] = rec.og.split(/\s*\,\s*/);
+    if (rec.og && rec.og.match(/[og\d,\s]+/i)){
+        rec["ogs"] = rec.og.split(/\s*,\s*/);
         // if (rec.og.length>1){
             // console.log(rec.og);
         // }
@@ -144,10 +146,10 @@ const fields = Object.assign({}, arrToProps(corpus_fields), arrToProps(places_fi
     // console.log(places[p].ogl);
 // }
 
-////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////
 // In development phase, any data structure required by UI was generated on a backend to speed up prototyping
 // Afterwards, redundant data HAVE TO BE eliminated to minimize backend load and bloating of page memory
-////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////
 // const places_object = Object.assign({}, ...places_features.map(x => ({ [x.id]: x })));
 
 // const places2 = places;
@@ -175,10 +177,10 @@ const fields = Object.assign({}, arrToProps(corpus_fields), arrToProps(places_fi
 const data = {
     "meta": { 
         "update": time,
-        "years": [parseInt(yearsRange[0])-1, +yearsRange[yearsRange.length-2]],
+        "years": [Number(yearsRange[1]), Number(yearsRange[yearsRange.length-1])],
         "ogls": places.map(x => x.ogl),
         "ymins": yearsRange,
-        "filters": [ "xx", "objtype", "genre", "mat", "method", "carv", "lang", "orn", "inscond", "carvcut", "let", "pict", "objcond", "carvrel", "letvar", "paint", "orig", "region", "county" ],
+        "filters": ["xx", "objtype", "genre", "mat", "method", "carv", "lang", "orn", "inscond", "carvcut", "let", "pict", "objcond", "carvrel", "letvar", "paint", "orig", "region", "county"],
         "cols2": ["ogl", "name", "place", "region","district","county","suburb","monastery","country"]
     },
     // "records_object": Object.assign({}, ...corpus_features.map(x => ({ [x.id]: x }))),
@@ -206,27 +208,29 @@ app.use("/lazyload.js", express.static(path.join(__dirname, 'node_modules', 'van
 app.use("/popper.js", express.static(path.join(__dirname, 'node_modules', '@popperjs', 'core', 'dist', 'umd', 'popper.min.js')));
 app.use(express.static('node_modules/bulma-extensions/dist'));
 app.use(express.static('node_modules/devbridge-autocomplete/dist'));
+app.use(express.static('node_modules/nouislider/distribute'));
 app.use(express.static('node_modules/tippy.js/dist'));
 app.use(express.static('node_modules/@fortawesome/fontawesome-free/webfonts'));
+app.use(express.static('fonts'));
 app.use(express.static('public'));
 // cfg.front.mods.forEach(x => app.use(express.static(__dirname + x)));
 
 app.use( async(req, res, next) => {
     // const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     if (req.url === "/" || req.url === "/data.js"){
-        let data = cache.getSync(req.ip);
-        if (!data) {
+        let datum = cache.getSync(req.ip);
+        if (!datum) {
             let ipInfo = await whoiser(req.ip);
-            data = ipInfo.hasOwnProperty("descr")?ipInfo.descr+", "+ipInfo.country: "UNK";
-            cache.putSync(req.ip, data);
-            data += ' [get]';
+            datum = ipInfo.hasOwnProperty("descr")?ipInfo.descr+", "+ipInfo.country: "UNK";
+            cache.putSync(req.ip, datum);
+            datum += ' [get]';
         } 
         // Moscow Local Telephone Network (OAO MGTS)
         // Moscow, Russia, RU
         
-        data = data.replace("Moscow Local Telephone Network (OAO MGTS)", "MGTS").replace("\n", " ");
+        datum = datum.replace("Moscow Local Telephone Network (OAO MGTS)", "MGTS").replace("\n", " ");
         const ua = Bowser.parse(req.get('user-agent'));
-        logger.info(`${req.ip} ${data} • ${ua.browser.name} ${ua.browser.version} @ ${ua.os.name} ${ua.os.versionName}`);
+        logger.info(`${req.ip} ${datum} • ${ua.browser.name} ${ua.browser.version} @ ${ua.os.name} ${ua.os.versionName}`);
         
         // satelize.satelize({ip:req.ip}, function(err, payload) {
           // // if used with expressjs
@@ -253,14 +257,13 @@ app.get("/:cir(cir[0-9]+)", (req, res) => {
 	const row = db.prepare('SELECT * FROM docs WHERE cir = ?').get(req.params.cir.toUpperCase());
 	
 	if (row && row.hasOwnProperty("cir")) {
-		row["ogs"] = row.og.split(/\s*\,\s*/);
+		row["ogs"] = row.og.split(/\s*,\s*/);
 	}
 	// console.log(row);
     // res.sendFile(root);
 	// res.json(row.hasOwnProperty("cir")?row:{});
 	const singlePath = path.join(__dirname, 'public', 'single-index.html');
-	let single = fs.readFileSync(singlePath, 'utf-8');
-	single = single.replace('■', '<script> var datum = '+JSON.stringify(row)+';</script>');
+	let single = fs.readFileSync(singlePath, 'utf-8').replace('■', '<script> var datum = '+JSON.stringify(row)+';</script>');
     // res.sendFile(single);
     res.send(single);
 });
@@ -272,15 +275,15 @@ app.get("/cir", (req, res) => {
 });
 
 app.get("/data", async(req, res) =>  {
-    let data = cache.getSync("all");
-    res.send(data);
+    let datum = cache.getSync("all");
+    res.send(datum);
 });
 
 app.get("/data.js", async(req, res) =>  {
-    let data = cache.getSync("all");
+    let datum = cache.getSync("all");
     res.setHeader('content-type', 'text/javascript');
     res.writeHead(200);
-    res.end('var data = '+ data);
+    res.end('var data = '+ datum);
 });
 
 // app.all("*", (req, res) => {

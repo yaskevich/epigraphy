@@ -3,7 +3,10 @@
 const fs = require('fs');
 const path = require('path');
 const csv = require('async-csv');
-const sqlite = require('better-sqlite3');
+const SQLite = require('better-sqlite3');
+const config = require('config');
+
+const appDir = path.join(__dirname, ".."); //__dirname
 
 function processRow(datacolumns, len) {
     let realdata = "";
@@ -40,15 +43,17 @@ function processRow(datacolumns, len) {
 }
 
 
-async function importSheet(db, options) {
+async function importSheet(db, book, options) {
     const {
         table,
-        sheet,
+        sheetIndex,
         mapFile,
         dbgFile
     } = options;
 
-    const csvString = fs.readFileSync(mapFile, 'utf-8');
+    const sheet = book[sheetIndex];
+
+    const csvString = fs.readFileSync(path.join(__dirname, ...mapFile), 'utf-8');
     const mapArr = await csv.parse(csvString);
 
     // console.log(mapArr);
@@ -208,48 +213,26 @@ async function importSheet(db, options) {
         let uniq = "";
 
         for (let [key, value] of Object.entries(big)) {
-            fs.writeFileSync(path.join("all", key + '.txt'), value.join("\n"));
+            fs.writeFileSync(path.join("debug", "all", key + '.txt'), value.join("\n"));
             uniq += "\n\n♦ " + key + " [" + mapEnRu[key] + "]\n" + [...new Set(value)].join("\n");
         }
         output += uniq;
         output += `rows in sheet ${totalData} || rows with data ${counter}`;
-        fs.writeFileSync(path.join(__dirname, dbgFile), output);
+        fs.writeFileSync(path.join(appDir, ...dbgFile), output);
     }
 }
 
 
 (async () => {
-
-    const dbFile = "cir.db";
-    const srcFile = "corpus.json";
-    // if (fs.existsSync(dbFile)) {
-    // fs.unlinkSync(dbFile);
-    // }    
-    // const curtime = Math.round((new Date()).getTime() / 1000);
-    // console.log("Current time", curtime);
-
+    const cfg = config.get('app');
+    const dbFile = path.join(appDir, cfg.dbName);
+    // if (fs.existsSync(dbFile)) { fs.unlinkSync(dbFile); }    
+    const srcFile = path.join(appDir, cfg.sourceFile);
     const rawdata = fs.readFileSync(srcFile);
     const doc = JSON.parse(rawdata);
-
-    const tasks = [{
-            "table": "corpus",
-            "sheet": doc.data.sheets[0],
-            "mapFile": "mapping1.csv",
-            "dbgFile": "out-cir.txt"
-        },
-        {
-            "table": "places",
-            "sheet": doc.data.sheets[3],
-            "mapFile": "mapping3.csv",
-            "dbgFile": "out-places.txt"
-        },
-    ];
-    // let db = new sqlite(dbFile, { verbose: console.log });
-    let db = new sqlite(dbFile);
-
+    const tasks = [cfg.sources.inscriptions, cfg.sources.places];
+    const db = new SQLite(dbFile);
     // const [resultCorpus, resultPlaces] = 
-    await Promise.all(tasks.map(t => importSheet(db, t)));
+    await Promise.all(tasks.map(t => importSheet(db, doc.data.sheets, t)));
     // await importSheet(db, tasks[0])
-
-    // console.log("OK");
 })();

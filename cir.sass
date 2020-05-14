@@ -21,7 +21,8 @@ $primary: $turquoise;
 // Font Awesome path
 $fa-font-path: "";
 // Cyrillic fonts
-$cyr-font-path: "fonts";
+// $cyr-font-path: "fonts";
+$cyr-font-path: "";
 
 // $checkbox-border: .1rem solid $grey-lighter !default
 // $checkradio-focus: 1px dotted $grey-light !default
@@ -36,66 +37,107 @@ $cyr-font-path: "fonts";
 // $input-shadow: none;
 
 .out
-	padding: .4rem 1rem
-	overflow: unset !important
+    padding: .4rem 1rem
+    overflow: unset !important
 
 .red
-	color: $primary
-	
+    color: $primary
+    
 .button.is-info.red-back
-	background-color: $primary
+    background-color: $primary
 
 .button.dropfilter.is-static
-	border: none
-	color: black
-	font-weight: bold
-	background-color: white
-	
+    border: none
+    color: black
+    font-weight: bold
+    background-color: white
+    
 .sorting
-	margin: 1em	
-	
-.columns.other	
-	margin-top: -2rem
-	
+    margin: 1em 
+    
+// .columns.other  
+    // margin-top: -2rem
+    
 // .setup.container
-	// margin-bottom: 1em
-	
-.container.filters-set	
-	margin-top: 1em
-	
+    // margin-bottom: 1em
+    
+.container.filters-set  
+    margin-top: 1em
+    
 .container.dataset-corpus
-	margin-top: 2em
-	
-.button.dropfilter.all-clear	
-	color: $primary
+    margin-top: 2em
+    
+.button.dropfilter.all-clear    
+    color: $primary
 
 
 img.preview:hover
      transform: scale(1.05)
 
 .nowrap
-	white-space: nowrap
+    white-space: nowrap
 
 .update-text
-	padding-left: 1em
+    padding-left: 1em
 
+.nav-item
+    font-variant: small-caps
+    
+// div.slider
+    // .noUi-base
+        // .noUi-connects
+            // .noUi-connect
+                // background: red
+                
+div.noUi-connect                
+    background: $primary
+    
+    
+.noUi-tooltip
+    display: none
 
+.noUi-active .noUi-tooltip 
+    display: block
+
+div#slider
+    padding-left: 1em
+    padding-right: 1em
+
+.slider-column
+    // min-width: 42.5rem
+    min-width: 13rem
+    
 div.image-holder
-	max-height: 100%
-	display: flex
-	flex-direction: column
-	justify-content: center
-	align-items: center
-	// border: solid 1px blue
+    max-height: 100%
+    display: flex
+    flex-direction: column
+    // flex-direction: column
+    // justify-content: center
+    // align-items: center
+    // border: solid 1px blue
+    
+span.pub:before 
+   font-family: "Font Awesome 5 Free"
+   content: "\f02d"
+   display: inline-block
+   padding-right: 5px
+   padding-left: 5px
+   vertical-align: middle
+   font-weight: 900
+   color: $primary
+
+span.pub
+	color: lightgrey
 
 img.single-image
-	// display: block
-	// margin: 0 auto
-	// max-width: 100%
-	// max-height: 100%
-	// border: 1px solid #dedede
-	// object-fit: contain
-	// max-height: 100%
+    align-self: center
+    // display: block
+    // margin: 0 auto
+    // max-width: 100%
+    // max-height: 100%
+    // border: 1px solid #dedede
+    // object-fit: contain
+    // max-height: 100%
 
 .bold
     font-weight: bold
@@ -108,79 +150,81 @@ img.single-image
     font-family: 'Kliment Std'
 
 .dropfilter
-	display: block !important
+    display: block !important
+    min-width: 13rem
     // width: 15rem
+    
 .photocell
-	width: 2rem
+    width: 2rem
 
 .filter-options
-	padding: 5px 15px 5px 15px
+    padding: 5px 15px 5px 15px
 
 .header-tip 
-	margin-left: 5px
-	
+    margin-left: 5px
+    
 .empty
-	color: gray
-	
+    color: gray
+    
 .cirlogo
-	margin-left: -20px
-	
+    margin-left: -20px
+    
 .userfilter
-	color: $primary
-	margin-left: 5px
-	
-.box-active	
-	background-color: $primary
-	border-radius: 25px
+    color: $primary
+    margin-left: 5px
+    
+.box-active 
+    background-color: $primary
+    border-radius: 25px
 
 a.bold
-	color: black
+    color: black
 
 td
-	img 
-		cursor: pointer
+    img 
+        cursor: pointer
 
 // $radius: .5rem
-// $slider-radius:	$radius
+// $slider-radius:  $radius
 // $grey: $primary
 // $white: #D0D1CD;
-// // $slider-track-background:	$grey-lighter
-// $slider-track-radius:	$radius
-// $slider-track-border:	0px solid $grey
-// $slider-track-shadow:	0px 0px 0px $grey
-// $slider-thumb-background:	$white
-// $slider-thumb-radius:	$radius
-// // $slider-thumb-border:	1px solid $grey-light
-// $slider-thumb-to-track-ratio:	2
-// $slider-output-width:	3rem
-// // $slider-output-background:	$grey-dark
-// $slider-output-radius:	$radius	
+// // $slider-track-background: $grey-lighter
+// $slider-track-radius:    $radius
+// $slider-track-border:    0px solid $grey
+// $slider-track-shadow:    0px 0px 0px $grey
+// $slider-thumb-background:    $white
+// $slider-thumb-radius:    $radius
+// // $slider-thumb-border: 1px solid $grey-light
+// $slider-thumb-to-track-ratio:    2
+// $slider-output-width:    3rem
+// // $slider-output-background:    $grey-dark
+// $slider-output-radius:   $radius 
 .autocomplete-suggestions
-	border: 1px solid #999
-	// background: #FFF
-	background: lightgrey
-	overflow: auto
-	// overflow: inherit
-	// width: 300px
-	
+    border: 1px solid #999
+    // background: #FFF
+    background: lightgrey
+    overflow: auto
+    // overflow: inherit
+    // width: 300px
+    
 .autocomplete-suggestion
-	padding: 2px 5px
-	white-space: nowrap	
-	overflow: hidden
+    padding: 2px 5px
+    white-space: nowrap 
+    overflow: hidden
 
 .autocomplete-selected
-	background: #F0F0F0
-	
+    background: #F0F0F0
+    
 .autocomplete-suggestions strong
-	font-weight: normal
-	color: #3399FF
-	
+    font-weight: normal
+    color: #3399FF
+    
 .autocomplete-group
-	padding: 2px 5px
+    padding: 2px 5px
 
 .autocomplete-group strong 
-	display: block
-	border-bottom: 1px solid #000
+    display: block
+    border-bottom: 1px solid #000
 
 
 /* Web Font CSS declaration for Church Slavonic fonts */
@@ -189,124 +233,124 @@ td
 // https://sci.ponomar.net/ru/tools.html
 
 @font-face 
-	font-family: 'Cathisma Unicode'
-	src: url('#{$cyr-font-path}/CathismaUnicode.eot')
-	src: url('#{$cyr-font-path}/CathismaUnicode.eot?#iefix') format('embedded-opentype'),
-	url('#{$cyr-font-path}/CathismaUnicode.woff2') format('woff2'),
-	url('#{$cyr-font-path}/CathismaUnicode.woff') format('woff'),
-	url('#{$cyr-font-path}/CathismaUnicode.ttf') format('truetype')
-	font-weight: normal
-	font-style: normal
+    font-family: 'Cathisma Unicode'
+    src: url('#{$cyr-font-path}/CathismaUnicode.eot')
+    src: url('#{$cyr-font-path}/CathismaUnicode.eot?#iefix') format('embedded-opentype'),
+    url('#{$cyr-font-path}/CathismaUnicode.woff2') format('woff2'),
+    url('#{$cyr-font-path}/CathismaUnicode.woff') format('woff'),
+    url('#{$cyr-font-path}/CathismaUnicode.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
 
 @font-face
-	font-family: 'Fedorovsk Unicode'
-	src: url('#{$cyr-font-path}/FedorovskUnicode.eot')
-	src: url('#{$cyr-font-path}/FedorovskUnicode.eot?#iefix') format('embedded-opentype'),
-	url('#{$cyr-font-path}/FedorovskUnicode.woff2') format('woff2'),
-	url('#{$cyr-font-path}/FedorovskUnicode.woff') format('woff'),
-	url('#{$cyr-font-path}/FedorovskUnicode.ttf') format('truetype')
-	font-weight: normal
-	font-style: normal
+    font-family: 'Fedorovsk Unicode'
+    src: url('#{$cyr-font-path}/FedorovskUnicode.eot')
+    src: url('#{$cyr-font-path}/FedorovskUnicode.eot?#iefix') format('embedded-opentype'),
+    url('#{$cyr-font-path}/FedorovskUnicode.woff2') format('woff2'),
+    url('#{$cyr-font-path}/FedorovskUnicode.woff') format('woff'),
+    url('#{$cyr-font-path}/FedorovskUnicode.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
 
 @font-face
-	font-family: 'Indiction Unicode'
-	src: url('#{$cyr-font-path}/IndictionUnicode.eot')
-	src: url('#{$cyr-font-path}/IndictionUnicode.eot?#iefix') format('embedded-opentype'),
-	url('#{$cyr-font-path}/IndictionUnicode.woff2') format('woff2'),
-	url('#{$cyr-font-path}/IndictionUnicode.woff') format('woff'),
-	url('#{$cyr-font-path}/IndictionUnicode.ttf') format('truetype')
-	font-weight: normal
-	font-style: normal
+    font-family: 'Indiction Unicode'
+    src: url('#{$cyr-font-path}/IndictionUnicode.eot')
+    src: url('#{$cyr-font-path}/IndictionUnicode.eot?#iefix') format('embedded-opentype'),
+    url('#{$cyr-font-path}/IndictionUnicode.woff2') format('woff2'),
+    url('#{$cyr-font-path}/IndictionUnicode.woff') format('woff'),
+    url('#{$cyr-font-path}/IndictionUnicode.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
 
 @font-face
-	font-family: 'Menaion Unicode'
-	src: url('#{$cyr-font-path}/MenaionUnicode.eot')
-	src: url('#{$cyr-font-path}/MenaionUnicode.eot?#iefix') format('embedded-opentype'),
-	url('#{$cyr-font-path}/MenaionUnicode.woff2') format('woff2'),
-	url('#{$cyr-font-path}/MenaionUnicode.woff') format('woff'),
-	url('#{$cyr-font-path}/MenaionUnicode.ttf') format('truetype')
-	font-weight: normal
-	font-style: normal
+    font-family: 'Menaion Unicode'
+    src: url('#{$cyr-font-path}/MenaionUnicode.eot')
+    src: url('#{$cyr-font-path}/MenaionUnicode.eot?#iefix') format('embedded-opentype'),
+    url('#{$cyr-font-path}/MenaionUnicode.woff2') format('woff2'),
+    url('#{$cyr-font-path}/MenaionUnicode.woff') format('woff'),
+    url('#{$cyr-font-path}/MenaionUnicode.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
 
 @font-face
-	font-family: 'Monomakh Unicode'
-	src: url('#{$cyr-font-path}/MonomakhUnicode.eot')
-	src: url('#{$cyr-font-path}/MonomakhUnicode.eot?#iefix') format('embedded-opentype'),
-	url('#{$cyr-font-path}/MonomakhUnicode.woff2') format('woff2'),
-	url('#{$cyr-font-path}/MonomakhUnicode.woff') format('woff'),
-	url('#{$cyr-font-path}/MonomakhUnicode.ttf') format('truetype')
-	font-weight: normal
-	font-style: normal
+    font-family: 'Monomakh Unicode'
+    src: url('#{$cyr-font-path}/MonomakhUnicode.eot')
+    src: url('#{$cyr-font-path}/MonomakhUnicode.eot?#iefix') format('embedded-opentype'),
+    url('#{$cyr-font-path}/MonomakhUnicode.woff2') format('woff2'),
+    url('#{$cyr-font-path}/MonomakhUnicode.woff') format('woff'),
+    url('#{$cyr-font-path}/MonomakhUnicode.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
 
 @font-face
-	font-family: 'Oglavie Unicode'
-	src: url('#{$cyr-font-path}/OglavieUnicode.eot')
-	src: url('#{$cyr-font-path}/OglavieUnicode.eot?#iefix') format('embedded-opentype'),
-	url('#{$cyr-font-path}/OglavieUnicode.woff2') format('woff2'),
-	url('#{$cyr-font-path}/OglavieUnicode.woff') format('woff'),
-	url('#{$cyr-font-path}/OglavieUnicode.ttf') format('truetype')
-	font-weight: normal
-	font-style: normal
+    font-family: 'Oglavie Unicode'
+    src: url('#{$cyr-font-path}/OglavieUnicode.eot')
+    src: url('#{$cyr-font-path}/OglavieUnicode.eot?#iefix') format('embedded-opentype'),
+    url('#{$cyr-font-path}/OglavieUnicode.woff2') format('woff2'),
+    url('#{$cyr-font-path}/OglavieUnicode.woff') format('woff'),
+    url('#{$cyr-font-path}/OglavieUnicode.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
 
 @font-face
-	font-family: 'Pochaevsk Unicode'
-	src: url('#{$cyr-font-path}/PochaevskUnicode.eot')
-	src: url('#{$cyr-font-path}/PochaevskUnicode.eot?#iefix') format('embedded-opentype'),
-	url('#{$cyr-font-path}/PochaevskUnicode.woff2') format('woff2'),
-	url('#{$cyr-font-path}/PochaevskUnicode.woff') format('woff'),
-	url('#{$cyr-font-path}/PochaevskUnicode.ttf') format('truetype')
-	font-weight: normal
-	font-style: normal
+    font-family: 'Pochaevsk Unicode'
+    src: url('#{$cyr-font-path}/PochaevskUnicode.eot')
+    src: url('#{$cyr-font-path}/PochaevskUnicode.eot?#iefix') format('embedded-opentype'),
+    url('#{$cyr-font-path}/PochaevskUnicode.woff2') format('woff2'),
+    url('#{$cyr-font-path}/PochaevskUnicode.woff') format('woff'),
+    url('#{$cyr-font-path}/PochaevskUnicode.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
 
 @font-face
-	font-family: 'Pomorsky Unicode'
-	src: url('#{$cyr-font-path}/PomorskyUnicode.eot')
-	src: url('#{$cyr-font-path}/PomorskyUnicode.eot?#iefix') format('embedded-opentype'),
-	url('#{$cyr-font-path}/PomorskyUnicode.woff2') format('woff2'),
-	url('#{$cyr-font-path}/PomorskyUnicode.woff') format('woff'),
-	url('#{$cyr-font-path}/PomorskyUnicode.ttf') format('truetype')
-	font-weight: normal
-	font-style: normal
+    font-family: 'Pomorsky Unicode'
+    src: url('#{$cyr-font-path}/PomorskyUnicode.eot')
+    src: url('#{$cyr-font-path}/PomorskyUnicode.eot?#iefix') format('embedded-opentype'),
+    url('#{$cyr-font-path}/PomorskyUnicode.woff2') format('woff2'),
+    url('#{$cyr-font-path}/PomorskyUnicode.woff') format('woff'),
+    url('#{$cyr-font-path}/PomorskyUnicode.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
 
 @font-face
-	font-family: 'Ponomar Unicode'
-	src: url('#{$cyr-font-path}/PonomarUnicode.eot')
-	src: url('#{$cyr-font-path}/PonomarUnicode.eot?#iefix') format('embedded-opentype'),
-	url('#{$cyr-font-path}/PonomarUnicode.woff2') format('woff2'),
-	url('#{$cyr-font-path}/PonomarUnicode.woff') format('woff'),
-	url('#{$cyr-font-path}/PonomarUnicode.ttf') format('truetype')
-	font-weight: normal
-	font-style: normal
+    font-family: 'Ponomar Unicode'
+    src: url('#{$cyr-font-path}/PonomarUnicode.eot')
+    src: url('#{$cyr-font-path}/PonomarUnicode.eot?#iefix') format('embedded-opentype'),
+    url('#{$cyr-font-path}/PonomarUnicode.woff2') format('woff2'),
+    url('#{$cyr-font-path}/PonomarUnicode.woff') format('woff'),
+    url('#{$cyr-font-path}/PonomarUnicode.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
 
 @font-face
-	font-family: 'Shafarik'
-	src: url('#{$cyr-font-path}/Shafarik-Normal.eot')
-	src: url('#{$cyr-font-path}/Shafarik-Normal.eot?#iefix') format('embedded-opentype'),
-	url('#{$cyr-font-path}/Shafarik-Normal.woff2') format('woff2'),
-	url('#{$cyr-font-path}/Shafarik-Normal.woff') format('woff'),
-	url('#{$cyr-font-path}/Shafarik-Normal.ttf') format('truetype')
-	font-weight: normal
-	font-style: normal
+    font-family: 'Shafarik'
+    src: url('#{$cyr-font-path}/Shafarik-Normal.eot')
+    src: url('#{$cyr-font-path}/Shafarik-Normal.eot?#iefix') format('embedded-opentype'),
+    url('#{$cyr-font-path}/Shafarik-Normal.woff2') format('woff2'),
+    url('#{$cyr-font-path}/Shafarik-Normal.woff') format('woff'),
+    url('#{$cyr-font-path}/Shafarik-Normal.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
 
 @font-face
-	font-family: 'Vertograd Unicode'
-	src: url('#{$cyr-font-path}/VertogradUnicode.eot')
-	src: url('#{$cyr-font-path}/VertogradUnicode.eot?#iefix') format('embedded-opentype'),
-	url('#{$cyr-font-path}/VertogradUnicode.woff2') format('woff2'),
-	url('#{$cyr-font-path}/VertogradUnicode.woff') format('woff'),
-	url('#{$cyr-font-path}/VertogradUnicode.ttf') format('truetype')
-	font-weight: normal
-	font-style: normal
+    font-family: 'Vertograd Unicode'
+    src: url('#{$cyr-font-path}/VertogradUnicode.eot')
+    src: url('#{$cyr-font-path}/VertogradUnicode.eot?#iefix') format('embedded-opentype'),
+    url('#{$cyr-font-path}/VertogradUnicode.woff2') format('woff2'),
+    url('#{$cyr-font-path}/VertogradUnicode.woff') format('woff'),
+    url('#{$cyr-font-path}/VertogradUnicode.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
 
 @font-face
-	font-family: 'Kliment Std'
-	src: url('#{$cyr-font-path}/KlimentStd.eot')
-	src: url('#{$cyr-font-path}/KlimentStd.eot?#iefix') format('embedded-opentype'),
-	url('#{$cyr-font-path}/KlimentStd.woff2') format('woff2'),
-	url('#{$cyr-font-path}/KlimentStd.woff') format('woff'),
-	url('#{$cyr-font-path}/KlimentStd.ttf') format('truetype')
-	font-weight: normal
-	font-style: normal
+    font-family: 'Kliment Std'
+    src: url('#{$cyr-font-path}/KlimentStd.eot')
+    src: url('#{$cyr-font-path}/KlimentStd.eot?#iefix') format('embedded-opentype'),
+    url('#{$cyr-font-path}/KlimentStd.woff2') format('woff2'),
+    url('#{$cyr-font-path}/KlimentStd.woff') format('woff'),
+    url('#{$cyr-font-path}/KlimentStd.ttf') format('truetype')
+    font-weight: normal
+    font-style: normal
 
 // src: url('#{$cyr-font-path}/fa-regular-400.eot');
 // https://fontawesome.com/how-to-use/on-the-web/using-with/sass
@@ -323,7 +367,7 @@ td
 // @import "./node_modules/bulma-extensions/bulma-pricingtable/src/sass/index.sass"
 // @import "./node_modules/bulma-extensions/bulma-quickview/src/sass/index.sass"
 // @import "./node_modules/bulma-extensions/bulma-ribbon/src/sass/index.sass"
-@import "./node_modules/bulma-extensions/bulma-slider/src/sass/index.sass"
+// @import "./node_modules/bulma-extensions/bulma-slider/src/sass/index.sass"
 // @import "./node_modules/bulma-extensions/bulma-steps/src/sass/index.sass"
 @import "./node_modules/bulma-extensions/bulma-switch/src/sass/index.sass"
 // @import "./node_modules/bulma-extensions/bulma-tagsinput/src/sass/index.sass"
