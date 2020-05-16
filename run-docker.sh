@@ -1,0 +1,1 @@
+docker run -p 3333:7528 -d ya/node-web-app

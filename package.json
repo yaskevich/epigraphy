@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Web Interface to the Corpus of Russian Inscriptions",
   "main": "index.js",
+    "repository": {
+    "type": "git",
+    "url": "git://github.com/yaskevich/epigraphy.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",

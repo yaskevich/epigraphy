@@ -1,0 +1,33 @@
+{
+  // app configs
+  "app": {
+    "docID": "1foslhreAi1LTBBtvq7eKWaB_3BbSbXgMFR2FQ8T9GR4",
+    "keyFile": ["jwt.json"],
+	"dbName": "cir.db", 
+    "sourceFile": "corpus.json",
+	"sources": {
+        "inscriptions": {
+            "table": "corpus",
+            "sheetIndex": 0,
+            "mapFile": ["mapping1.csv"],
+            "dbgFile": ["debug", "out-cir.txt"]
+        },
+        "places": {
+            "table": "places",
+            "sheetIndex": 3,
+            "mapFile": ["mapping3.csv"],
+            "dbgFile": ["debug", "out-places.txt"]
+        },
+		"descriptions": {
+            "dir": "data",
+			"output": ["debug", "out-desc.txt"],
+			"table": "docs",
+            "mapFile": ["mapping.csv"]
+		}
+	},
+    "server": {
+      "host": "localhost",
+      "port": 7528
+    }
+  }
+}
