@@ -10,13 +10,17 @@
             "table": "corpus",
             "sheetIndex": 0,
             "mapFile": ["mapping1.csv"],
-            "dbgFile": ["debug", "out-cir.txt"]
+            "dbgFile": ["debug", "out-cir.txt"],
+			"dbgDir": ["debug", "all"],
+			"dbgMode": 2 // 0 – nothing, 1 – only file,  2 – print every proprety into separate file
         },
         "places": {
             "table": "places",
-            "sheetIndex": 3,
+            "sheetIndex": 2,
             "mapFile": ["mapping3.csv"],
-            "dbgFile": ["debug", "out-places.txt"]
+            "dbgFile": ["debug", "out-places.txt"],
+			"dbgDir": ["debug", "all"],
+			"dbgMode": 2
         },
 		"descriptions": {
             "dir": "data",

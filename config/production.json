@@ -1,1 +1,14 @@
-{}
+{
+  "app": {
+	"sources": {
+        "inscriptions": {
+			"dbgMode": 0
+        },
+        "places": {
+			"dbgMode": 0
+        },
+		"descriptions": {
+		}
+	}
+  }
+}

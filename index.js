@@ -3,10 +3,14 @@
 const fs = require('fs');
 const path = require('path');
 const config = require('config');
+require('dotenv').config(); // user/password for authentication, should be moved into DB later
 const cache = require('persistent-cache')();
 const Database = require('better-sqlite3');
 const express = require('express');
 const asyncRoute = require('route-async');
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const whoiser = require('whoiser');
 // const pino = require('pino');
 // const satelize = require('satelize-lts');
@@ -25,8 +29,7 @@ var streams = [{stream: fs.createWriteStream('app.log', {flags:'a'}) }, {stream:
 var logger = pinoms(pinoms.multistream(streams));
 const app = express();
 const cfg = config.get('app');
-// const cfg = pr.init();
-const port = cfg.server.port; // cfg.front.port;
+const port = cfg.server.port||7528;
 const dbFile = path.join(__dirname, cfg.dbName);
 const dataFile = path.join(__dirname, cfg.sourceFile);
 const translations = {
@@ -62,6 +65,7 @@ let db = new Database(dbFile);
 const records = db.prepare('SELECT corpus.*, region, county, docs.filename as fn FROM corpus left join places on corpus.ogl = places.ogl left join docs on corpus.cir = docs.cir ORDER BY yr ASC NULLS LAST;').all();    
 const corpus_features = db.prepare('SELECT * from corpus_features ORDER BY v ASC').all();
 const places_features = db.prepare('SELECT * from places_features ORDER BY v ASC').all();
+// console.log(JSON.stringify(places_features, null, 2));
 const places = db.prepare('SELECT * from places').all();
 const corpus_fields = db.prepare('SELECT * from corpus_fields').all();
 const places_fields = db.prepare('SELECT * from places_fields').all();
@@ -131,8 +135,9 @@ for (var p in places_features) {
     }
 }
 
-regions.push(regions.shift());
-counties.push(counties.shift());
+// console.log(regions);
+// regions.push(regions.shift());
+// counties.push(counties.shift());
 filters.region = regions;
 filters.county = counties;
 
@@ -201,6 +206,7 @@ const data = {
 const data_json = JSON.stringify(data);
 cache.putSync('all', data_json);
 logger.info("[fetch SQL]");
+app.use(require('body-parser').urlencoded({ extended: true }));
 app.set('trust proxy', true);
 app.use("/mustache.js", express.static(path.join(__dirname, 'node_modules', 'mustache', 'mustache.min.js')));
 app.use("/jquery.js", express.static(path.join(__dirname, 'node_modules', 'jquery', 'dist', 'jquery.min.js')));
@@ -212,42 +218,97 @@ app.use(express.static('node_modules/nouislider/distribute'));
 app.use(express.static('node_modules/tippy.js/dist'));
 app.use(express.static('node_modules/@fortawesome/fontawesome-free/webfonts'));
 app.use(express.static('fonts'));
-app.use(express.static('public'));
-// cfg.front.mods.forEach(x => app.use(express.static(__dirname + x)));
+app.use(express.static('pictures'));
+
+passport.use(new LocalStrategy(
+  function(id, password, done) {
+	let user = {"id": id};
+	if (id === process.env.USER_ID && password === process.env.USER_PASSWORD) {
+		logger.info("user " + id + " authenticated");
+		return done(null, user);		
+	} else {
+		logger.warn("logging in attempt as user " + id + " [" + password + "]");
+		done(null,false);
+	}
+  }
+));
+
+passport.serializeUser(function(user, cb) {
+	cb(null, user.id);
+});
+
+passport.deserializeUser(async function(id, cb) {
+  let user = {"id": id};
+  cb(null, user);
+});
+app.use(session({
+  secret: 'dfgsdg3465t54gsvjcinjbn32edx',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use( async(req, res, next) => {
     // const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    if (req.url === "/" || req.url === "/data.js"){
-        let datum = cache.getSync(req.ip);
-        if (!datum) {
-            let ipInfo = await whoiser(req.ip);
-            datum = ipInfo.hasOwnProperty("descr")?ipInfo.descr+", "+ipInfo.country: "UNK";
-            cache.putSync(req.ip, datum);
-            datum += ' [get]';
-        } 
-        // Moscow Local Telephone Network (OAO MGTS)
-        // Moscow, Russia, RU
-        
-        datum = datum.replace("Moscow Local Telephone Network (OAO MGTS)", "MGTS").replace("\n", " ");
-        const ua = Bowser.parse(req.get('user-agent'));
-        logger.info(`${req.ip} ${datum} • ${ua.browser.name} ${ua.browser.version} @ ${ua.os.name} ${ua.os.versionName}`);
-        
-        // satelize.satelize({ip:req.ip}, function(err, payload) {
-          // // if used with expressjs
-          // // res.send(payload);
-          // // res.json...
-          // // pr.logger.info("catch *", req.originalUrl, req.query);
-          // // pr.logger.info(`${req.ip} ${payload.country.en} ${req.headers.host}${req.originalUrl}`)
-          // console.log(`${req.ip} ${payload.country.en} ${req.headers.host}${req.originalUrl}`)
-        // });
-    }
-    return next();
+	if (!req.isAuthenticated() && !['/login', '/bulma.custom.css', '/omega-150x150.png'].includes(req.url)) {
+		res.redirect('/login');
+	} else {
+		if (req.url === "/data.js" || req.url === "/"){
+			let datum = cache.getSync(req.ip);
+			if (!datum) {
+				let ipInfo = await whoiser(req.ip);
+				datum = ipInfo.hasOwnProperty("descr")&&ipInfo.descr?ipInfo.descr+", "+ipInfo.country: "UNK";
+				cache.putSync(req.ip, datum);
+				datum += ' [get]';
+			} 
+			// Moscow Local Telephone Network (OAO MGTS)
+			// Moscow, Russia, RU
+			
+			datum = datum.replace("Moscow Local Telephone Network (OAO MGTS)", "MGTS").replace("\n", " ");
+			const ua = Bowser.parse(req.get('user-agent'));
+			logger.info(`${req.ip} ${datum} • ${ua.browser.name} ${ua.browser.version} @ ${ua.os.name} ${ua.os.versionName}`);
+			
+			// satelize.satelize({ip:req.ip}, function(err, payload) {
+			  // // if used with expressjs
+			  // // res.send(payload);
+			  // // res.json...
+			  // // pr.logger.info("catch *", req.originalUrl, req.query);
+			  // // pr.logger.info(`${req.ip} ${payload.country.en} ${req.headers.host}${req.originalUrl}`)
+			  // console.log(`${req.ip} ${payload.country.en} ${req.headers.host}${req.originalUrl}`)
+			// });
+		}
+		return next();
+	}
 });
+app.use(express.static('public'));
+
+const isAuthenticated = async (req, res, next) => {
+	console.log(req.isAuthenticated());
+    if (req.isAuthenticated()) { return next(); }
+    res.redirect('/login');
+};
+
 
 app.get("/", (req, res) => {
-    // console.log("landing be");
+    logger.info("landing");
+	console.log(req);
     const root = path.join(__dirname, 'public', 'index.html');
     res.sendFile(root);
+});
+
+app.get('/logout', (req, res) => {
+	logger.info("logging out");
+    req.logout();
+    res.redirect('/login');
+  });
+
+app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login'}));
+
+app.get("/login", (req, res) => {
+    const loginForm = path.join(__dirname, 'public', 'login.html');
+    res.sendFile(loginForm);
 });
 
 app.get("/:cir(cir[0-9]+)", (req, res) => {
@@ -259,17 +320,12 @@ app.get("/:cir(cir[0-9]+)", (req, res) => {
 	if (row && row.hasOwnProperty("cir")) {
 		row["ogs"] = row.og.split(/\s*,\s*/);
 	}
-	// console.log(row);
-    // res.sendFile(root);
-	// res.json(row.hasOwnProperty("cir")?row:{});
 	const singlePath = path.join(__dirname, 'public', 'single-index.html');
 	let single = fs.readFileSync(singlePath, 'utf-8').replace('■', '<script> var datum = '+JSON.stringify(row)+';</script>');
-    // res.sendFile(single);
     res.send(single);
 });
 
 app.get("/cir", (req, res) => {
-    // console.log("landing be");
     const root = path.join(__dirname, 'public', 'index.html');
     res.sendFile(root);
 });

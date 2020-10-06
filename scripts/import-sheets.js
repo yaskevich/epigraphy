@@ -48,8 +48,20 @@ async function importSheet(db, book, options) {
         table,
         sheetIndex,
         mapFile,
-        dbgFile
+        dbgFile,
+		dbgDir,
+		dbgMode
     } = options;
+
+	const dbgFilePath = path.join(appDir, ...dbgFile);
+	const dbgDirPath = path.join(appDir, ...dbgDir);
+
+	if (dbgMode) {
+		fs.mkdir(require('path').dirname(dbgFilePath), { recursive: true }, (err) => { if (err) throw err; });
+		if (dbgMode > 1) {
+			fs.mkdir(dbgDirPath, { recursive: true }, (err) => { if (err) throw err; });
+		}
+	}
 
     const sheet = book[sheetIndex];
 
@@ -211,14 +223,17 @@ async function importSheet(db, book, options) {
         insertMany(sqlArrMod);
 
         let uniq = "";
-
         for (let [key, value] of Object.entries(big)) {
-            fs.writeFileSync(path.join("debug", "all", key + '.txt'), value.join("\n"));
+			if (dbgMode > 1) {
+				fs.writeFileSync(path.join(dbgDirPath, key + '.txt'), value.join("\n"));
+			}
             uniq += "\n\n♦ " + key + " [" + mapEnRu[key] + "]\n" + [...new Set(value)].join("\n");
         }
         output += uniq;
         output += `rows in sheet ${totalData} || rows with data ${counter}`;
-        fs.writeFileSync(path.join(appDir, ...dbgFile), output);
+		if (dbgMode) {
+			fs.writeFileSync(dbgFilePath, output);
+		}
     }
 }
 

@@ -252,9 +252,7 @@ $(function() {
             }
         };
 
-        $(".place-finder").autocomplete(options);
-        
-            
+        $(".place-finder").autocomplete(options);        
         slideControl = noUiSlider.create($('#slider')[0], {
             start: [data.meta.years[0], data.meta.years[1]],
             connect: true,
