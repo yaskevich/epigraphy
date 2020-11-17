@@ -25,16 +25,35 @@ NB: the application and data processing scripts were tested on **Ubuntu 18.04** 
 
 Execute `npm install` in a project folder.
 
-#### Data importing
+#### Command line interface for data management
 
-1. Put ID of Google Spreadsheet document that is a data source into *docID* property of config file.
-2. Generate Google Token (JWT) for web-service, *keyFile* property in config (path to file).
-3. Share the spreadsheet with the user who owns the token.
-4. Run the scripts:
+To process the data run`node ./cli.js` with appropriate arguments
 
-- `node scripts/download-sheets.js`: gets data from Google Spreadsheets  API. JWT token must be provided.
-- `node scripts/import-sheets.js`: takes JSON of a spreadsheet and converts it into SQLite database. Mapping tables for field names and their respective SQL column codes have to be provided – as CSV files. Currently used mappings are in [scripts](/scripts/) directory of this repository.
-- `node scripts/process-descriptions.js`: content of `data` folder is imported as an additional table containing detailed descriptions of objects related by their CIR codes. Currently data are [here](https://github.com/yaskevich/epidata/).
+1. `-l` or `--load` – load spreadsheet from Google.Disk
+2. `-j` or `--json` – import JSON file into database
+3. `-d` or `--desc` – import descriptions into database
+4. `-g` or `--google` – call №1 and №2 sequentially
+5. `-a`, `--all` – perform all tasks:  №1, №2 and №3
+
+Additional flag:
+
+`-v`, `--verbose` – verbose output
+
+To update the data from Google Spreadsheet use `node cli.js -g`
+
+To make full import use `node cli.js -a`
+
+To successfully run importing tasks, one has to provide
+
+1. valid config file
+2. JWT token: generate Google Token (JWT) for web-service (*keyFile* property as path to file in config) and share the spreadsheet with the Google user who owns the token.
+3. mappings: mapping tables for field names and their respective SQL column codes have to be provided – as CSV files. Currently used mappings are in [mappings](/mappings/) directory of this repository.
+
+Descriptions files are [here](https://github.com/yaskevich/epidata/), but for importing they have to be put into `data` directory next to `cli.js` Content of `data` is imported as an additional table containing detailed descriptions of objects related by their CIR codes.
+
+#### Before start
+
+Make sure that you provide variables USER_ID and USER_PASSWORD either in dotenv config file in root directory, or pass them with shell. They are used to allow administrator to log in. Currently, access to the project is limited via authorization interface.
 
 #### Running the application
 
