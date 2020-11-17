@@ -5,7 +5,7 @@
 
 1. Frontend (JQuery, SASS)
 2. Backend (NodeJS, SQLite)
-3. [Autoupdate](/scripts) (NodeJS, SQLite)
+3. [Autoupdater](/scripts) (NodeJS, SQLite)
 4. [MS Word exporter](/word) (Perl, MS Office/OLE)
 5. [Static files](https://github.com/yaskevich/epidata/)
 
@@ -21,7 +21,7 @@ Frontend web-server is a regular [Express.js](https://expressjs.com) application
 
 [NodeJS](https://nodejs.org/) must be installed on a server.
 
-NB: the application and data processing scripts were tested on **Ubuntu 18.04** with **NodeJS v13.14.0**.
+NB: the application and data processing scripts were tested on **Ubuntu 18.04** with **NodeJS 13.14.0**.
 
 Execute `npm install` in a project folder.
 
@@ -42,7 +42,7 @@ Execute `npm install` in a project folder.
 
 * `npm run start` or `nodemon index.js` 
 
-The front-end does not have any external dependencies and can run in a local network or on a local computer.
+The front-end code does not have any externally linked libraries, and can be run in a local network or on a local computer.
 
 By default, the web-server works on a port **7528**.
 
@@ -74,9 +74,9 @@ Run `run-docker.sh` to start the app in Docker container available on local port
 
 In `docker-update` folder dockerfile and script are provided which allow to build Docker image avoiding manual cloning this repository. But to work properly this Docker configuration requires Github Deploy keys, Google Web Token and authentication login/password pair  (as [env](https://www.npmjs.com/package/dotenv) file or as shell environment variables).
 
-Credentials **are not stored** in git for security reasons. One has to provide them (place into the directory where Docker scripts are to be executed).
+Credentials **are not stored** in git, for security reasons. One has to provide them (place into the directory where Docker scripts are to be executed).
 
-[Seprate repository](https://github.com/yaskevich/epidata/) for static files is a temporary stub, as soon as those files are also could be updated. WebDAV/FTP or similar infrastructure should be provided to users and appropriate directories are to be mapped into directory space accessible by frontend web-server.
+[Separate repository](https://github.com/yaskevich/epidata/) for static files is a temporary stub, as soon as those files are also could be updated. WebDAV/FTP or similar infrastructure should be provided to users and appropriate directories are to be mapped into directory space accessible by frontend web-server.
 
 
 
