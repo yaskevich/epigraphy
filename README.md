@@ -13,9 +13,11 @@ Docker file currently builds the frontend and backend, filling the database with
 
 The same build could be compiled manually, according to the instruction below.
 
-### Basic setup
+### Setup
 
-Frontend web-server is a regular [Express.js](https://expressjs.com) application. The [scripts](/scripts/) that fill the database share dependencies with the frontend, but have independent codebase.
+Frontend web-server is a regular [Express.js](https://expressjs.com) application. The [CLI](/cli.js) that fill the database shares dependencies with the frontend, but has independent codebase.
+
+*Completely separate part of the project is task of MS Word files processing: the code is written in Perl and file parsing has to be run on Windows machine with Microsoft Office installed (and Perl, obviously). However, [in this repo](https://github.com/yaskevich/epidata/) preparsed files are provided.*
 
 #### Preparations
 
@@ -53,7 +55,7 @@ Descriptions files are [here](https://github.com/yaskevich/epidata/), but for im
 
 #### Before start
 
-Make sure that you provide variables USER_ID and USER_PASSWORD either in dotenv config file in root directory, or pass them with shell. They are used to allow administrator to log in. Currently, access to the project is limited via authorization interface.
+Make sure that you provided variables USER_ID and USER_PASSWORD either in dotenv config file in root directory, or pass them with shell. They are used to allow administrator to log in. Currently, access to the project is limited via authorization interface.
 
 #### Running the application
 

@@ -466,7 +466,7 @@ async function processDescriptions(dbPath, dbgFilePath, sourceDir, tableName, ma
  * This wrapper function which runs descriptions extraction: it takes all the arguments from config file and passes them to processDescriptions function.
  */
 async function processDescriptionsWrapper() {
-    processDescriptions(cfg.dbName, cfg.sources.descriptions.output, cfg.sources.descriptions.dir, cfg.sources.descriptions.table, cfg.sources.descriptions.mapFile);
+    return processDescriptions(cfg.dbName, cfg.sources.descriptions.output, cfg.sources.descriptions.dir, cfg.sources.descriptions.table, cfg.sources.descriptions.mapFile);
 }
 
 /**
@@ -474,44 +474,66 @@ async function processDescriptionsWrapper() {
  */
 async function importSheetsWrapper() {
     const tasks = [cfg.sources.inscriptions, cfg.sources.places];
-    importSheets(cfg.dbName, cfg.sourceFile, tasks);
+    return importSheets(cfg.dbName, cfg.sourceFile, tasks);
 }
 
 /**
  * This wrapper function which runs descriptions extraction: it takes all the arguments from config file and passes them to downloadSheets function.
  */
 async function downloadSheetsWrapper() {
-    downloadSheets(cfg.keyFile, cfg.docID, cfg.sourceFile);
+    return downloadSheets(cfg.keyFile, cfg.docID, cfg.sourceFile);
 }
 
 // processing command line arguments
+(async () => {
+	if (cli.desc) {
+		if (cli.verbose) {
+			console.log("Task: parse files with descriptions into database");
+		}
+		await processDescriptionsWrapper();
+	} else if (cli.load) {
+		if (cli.verbose) {
+			console.log("Task: download Google Spreadsheet and store it as JSON");
+		}
+		await downloadSheetsWrapper();
+	} else if (cli.json) {
+		if (cli.verbose) {
+			console.log("Task: parse JSON into database");
+		}
+		await importSheetsWrapper();
+	} else if (cli.google) { // two basic tasks
+		if (cli.verbose) {
+			console.log("Task: download Google Spreadsheet, parse and put into database");
+		}
+		if (cli.verbose) { 
+			console.log(">>Downloading...");
+		}		
+		await downloadSheetsWrapper();
+		if (cli.verbose) { 
+			console.log(">>Importing JSON...");
+		}		
+		await importSheetsWrapper();
+	} else if (cli.all) {
+		if (cli.verbose) {
+			console.log(">>All tasks together");
+		}
+		
+		if (cli.verbose) { 
+			console.log(">>Downloading...");
+		}
+		await downloadSheetsWrapper();
+		
+		if (cli.verbose) { 
+			console.log(">>Importing JSON...");
+		}
+		await importSheetsWrapper();
 
-if (cli.desc) {
-    if (cli.verbose) {
-        console.log("Task: parse files with descriptions into database");
-    }
-    processDescriptionsWrapper();
-} else if (cli.load) {
-    if (cli.verbose) {
-        console.log("Task: download Google Spreadsheet and store it as JSON");
-    }
-    downloadSheetsWrapper();
-} else if (cli.json) {
-    if (cli.verbose) {
-        console.log("Task: parse JSON into database");
-    }
-    importSheetsWrapper();
-} else if (cli.google) { // two basic tasks
-    if (cli.verbose) {
-        console.log("Task: download Google Spreadsheet, parse and put into database");
-    }
-    downloadSheetsWrapper();
-    importSheetsWrapper();
-} else if (cli.all) {
-    if (cli.verbose) {
-        console.log("All tasks together");
-    }
-    downloadSheetsWrapper();
-    importSheetsWrapper();
-    processDescriptionsWrapper();
-}
+		if (cli.verbose) { 
+			console.log(">>Importing descriptions...");
+		}
+		await processDescriptionsWrapper();
+		if (cli.verbose) { 
+			console.log(">>Done!");
+		}
+	}
+})();
