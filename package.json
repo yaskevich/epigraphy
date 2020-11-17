@@ -1,6 +1,6 @@
 {
   "name": "epigraphy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Web Interface to the Corpus of Russian Inscriptions",
   "main": "index.js",
   "repository": {
@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "sync": "node scripts/download-sheets.js && node scripts/import-sheets.js",
+    "sync": "node ./cli.js --google",
     "css-build": "node-sass --omit-source-map-url cir.sass public/bulma.custom.css --output-style compressed",
     "css-watch": "npm run css-build -- --watch"
   },
@@ -38,6 +38,7 @@
     "bowser": "^2.11.0",
     "bulma-extensions": "^6.2.7",
     "config": "^3.3.2",
+    "cookie-session": "^1.4.0",
     "csvtojson": "^2.0.10",
     "devbridge-autocomplete": "^1.4.11",
     "dotenv": "^8.2.0",
@@ -64,6 +65,7 @@
   },
   "devDependencies": {
     "bulma": "^0.8.2",
+    "commander": "^6.2.0",
     "node-sass": "^4.14.1"
   }
 }
