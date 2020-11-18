@@ -77,7 +77,8 @@ d.setUTCSeconds(fi.ctimeMs/1000);
 // atimeMs: 1587866445003.176,
 // mtimeMs: 1587866444219.1943,
 // ctimeMs: 1587866444219.1943,
-const time = d.toLocaleString('ru-RU', { "timeZone": "Europe/Moscow", "hour12": false, "month": 'long', "day": 'numeric', "hour": "numeric", "minute": "numeric" } );
+// const time = d.toLocaleString('ru-RU', { "timeZone": "Europe/Moscow", "hour12": false, "month": 'long', "day": 'numeric', "hour": "numeric", "minute": "numeric" } );
+const time = d.toLocaleString('ru-RU', { "timeZone": "Europe/Moscow", "hour12": false, "month": 'long', "day": 'numeric' } );
 // console.log(time);
 let filters = {};
 
@@ -187,4 +188,4 @@ function getDocsData(cir) {
 
 const dataJSON = JSON.stringify(data);
 
-module.exports = { time, dataJSON};
+module.exports = { dataJSON, getDocsData};

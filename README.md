@@ -49,13 +49,15 @@ To successfully run importing tasks, one has to provide
 
 1. valid config file
 2. JWT token: generate Google Token (JWT) for web-service (*keyFile* property as path to file in config) and share the spreadsheet with the Google user who owns the token.
-3. mappings: mapping tables for field names and their respective SQL column codes have to be provided – as CSV files. Currently used mappings are in [mappings](/mappings/) directory of this repository.
+3. mappings: mapping tables for field names and their respective SQL column codes have to be provided – as CSV files. Currently used mappings are in [mapping](/mapping/) directory of this repository.
 
 Descriptions files are [here](https://github.com/yaskevich/epidata/), but for importing they have to be put into `data` directory next to `cli.js` Content of `data` is imported as an additional table containing detailed descriptions of objects related by their CIR codes.
 
 #### Before start
 
 Make sure that you provided variables USER_ID and USER_PASSWORD either in dotenv config file in root directory, or pass them with shell. They are used to allow administrator to log in. Currently, access to the project is limited via authorization interface.
+
+Perform `node ./cli.js -a -v ` – the database will be filled with actual data.
 
 #### Running the application
 
