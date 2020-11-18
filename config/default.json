@@ -9,7 +9,7 @@
         "inscriptions": {
             "table": "corpus",
             "sheetIndex": 0,
-            "mapFile": ["mapping1.csv"],
+            "mapFile": ["mapping", "mapping1.csv"],
             "dbgFile": ["debug", "out-cir.txt"],
 			"dbgDir": ["debug", "all"],
 			"dbgMode": 2 // 0 – nothing, 1 – only file,  2 – print every proprety into separate file
@@ -17,7 +17,7 @@
         "places": {
             "table": "places",
             "sheetIndex": 2,
-            "mapFile": ["mapping3.csv"],
+            "mapFile": ["mapping", "mapping3.csv"],
             "dbgFile": ["debug", "out-places.txt"],
 			"dbgDir": ["debug", "all"],
 			"dbgMode": 2
@@ -26,12 +26,13 @@
             "dir": "data",
 			"output": ["debug", "out-desc.txt"],
 			"table": "docs",
-            "mapFile": ["mapping.csv"]
+            "mapFile": ["mapping", "mapping.csv"]
 		}
 	},
     "server": {
       "host": "localhost",
-      "port": 7528
+      "port": 7528,
+      "secret": "dfgsdg3465t54gsvjcinjbn32edx"
     }
   }
 }
