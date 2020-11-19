@@ -1,5 +1,15 @@
-"use strict";
+'use strict';
 
+/**
+ * @file index.js is the root file for the example.
+ * It kicks things off.
+ * @see <a href="https://docs.philology.by/module-API.html">API</a>
+ */
+ 
+ /**
+ * Module which processes client queries.
+ * @module API
+ */
 const fs = require('fs');
 const path = require('path');
 const config = require('config');
@@ -13,7 +23,6 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const whoiser = require('whoiser');
 // const pino = require('pino');
-// const satelize = require('satelize-lts');
 // https://github.com/LionC/persistent-cache#readme
 const Bowser = require("bowser");
 var pinoms = require('pino-multi-stream');
@@ -25,7 +34,7 @@ const cfg = config.get('app');
 const port = cfg.server.port||7528;
 
 // caching data from the database on start
-cache.putSync('all', dbdata.dataJSON);
+cache.putSync('all', dbdata.getDataset());
 logger.info("[fetch SQL]");
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.set('trust proxy', true);
@@ -42,14 +51,15 @@ app.use(express.static('node_modules/@fortawesome/fontawesome-free/webfonts'));
 app.use(express.static('fonts'));
 app.use(express.static('pictures'));
 
-
 // caching static pages that are served or served after being modified
+
 // const root = path.join(__dirname, 'public', 'index.html');
 const loginForm = path.join(__dirname, 'public', 'login.html');
 const singlePath = path.join(__dirname, 'public', 'single-index.html');
 const singlePathContent = fs.readFileSync(singlePath, 'utf-8');
 
 // simple authentication
+
 passport.use(new LocalStrategy(
   function(id, password, done) {
     let user = {"id": id};
@@ -72,6 +82,7 @@ passport.deserializeUser(async function(id, cb) {
 });
 
 // session
+
 app.use(session({
   secret: cfg.server.secret,
   resave: false,
@@ -81,14 +92,14 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// IP logging middleware
+// IP logging / authentication checking middleware
+
 app.use( async(req, res, next) => {
     // const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     if (!req.isAuthenticated() && !['/login', '/bulma.custom.css', '/omega-150x150.png'].includes(req.url)) {
         res.redirect('/login');
     } else {
         if (req.url === "/data.js" || req.url === "/"){
-            
             // logging IP and related info of a user
             let datum = cache.getSync(req.ip);
             if (!datum) {
@@ -99,19 +110,9 @@ app.use( async(req, res, next) => {
             } 
             // Moscow Local Telephone Network (OAO MGTS)
             // Moscow, Russia, RU
-            
             datum = datum.replace("Moscow Local Telephone Network (OAO MGTS)", "MGTS").replace("\n", " ");
             const ua = Bowser.parse(req.get('user-agent'));
             logger.info(`${req.ip} ${datum} • ${ua.browser.name} ${ua.browser.version} @ ${ua.os.name} ${ua.os.versionName}`);
-            
-            // satelize.satelize({ip:req.ip}, function(err, payload) {
-              // // if used with expressjs
-              // // res.send(payload);
-              // // res.json...
-              // // pr.logger.info("catch *", req.originalUrl, req.query);
-              // // pr.logger.info(`${req.ip} ${payload.country.en} ${req.headers.host}${req.originalUrl}`)
-              // console.log(`${req.ip} ${payload.country.en} ${req.headers.host}${req.originalUrl}`)
-            // });
         }
         next();
     }

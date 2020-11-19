@@ -1,5 +1,15 @@
 'use strict';
 
+/**
+ * @file is the root file for the example.
+ * It kicks things off.
+ * @see <a href="module-CLI.html">CLI</a>
+ */
+
+/**
+ * Command Line application that creates, fills and updates the database from external sources.
+ * @module CLI
+ */
 const fs = require('fs');
 const {google} = require('googleapis');
 const path = require('path');
@@ -31,6 +41,7 @@ cli.parse(process.argv);
  * @param {string} keyPath is a path to key with Google JWT token.
  * @param {string} id is an identifer of the Google Spreadsheet document.
  * @returns {object} representation of Google Spreadsheet as an object or, in case of error, empty object (with/without error description).
+ * @memberof module:CLI
  */
 async function getSheet(keyPath, id) {
     if (id) {
@@ -75,6 +86,7 @@ async function getSheet(keyPath, id) {
  * @param {Array} keyPathArray is a path to key with Google JWT token represented as an array.
  * @param {string} id is an identifer of the Google Spreadsheet document.
  * @param {string} jsonFileName is a filename of downloaded Google Spreadsheet content stored as a file locally.
+ * @memberof module:CLI
  */
 async function downloadSheets(keyPathArray, id, jsonFileName) {
     const keyPath = path.join(appDir, ...keyPathArray);
@@ -107,6 +119,7 @@ async function downloadSheets(keyPathArray, id, jsonFileName) {
  * @param {Array} datacolumns is array of all columns of a document.
  * @param {number} len is amount of columns to process
  * @returns {Array} array with extracted data.
+ * @memberof module:CLI
  */
 function processRow(datacolumns, len) {
     let realdata = "";
@@ -147,6 +160,7 @@ function processRow(datacolumns, len) {
  * @param {object} db is a database object provided by SQLite module
  * @param {object} book is a sheets fragment of JSON representation of the Workbook from Google Spreadsheet
  * @param {object} options is a config section of this task (e.g. for inscriptions or places)
+ * @memberof module:CLI
  */
 async function importSheet(db, book, options) {
     const {
@@ -341,6 +355,7 @@ async function importSheet(db, book, options) {
  * @param {string} dbPath is a path to database where to put the data.
  * @param {string} jsonPath is a name of JSON file where Google Spreadsheet content is stored.
  * @param {string} tasksArray is an array of objects that contain such data as number of sheet in workbook, path to mapping file, path to debugging file, path to debugging directory, and debugging mode (see config format)
+ * @memberof module:CLI
  */
 async function importSheets(dbPath, jsonPath, tasksArray) {
     const dbFile = path.join(appDir, dbPath);
@@ -361,6 +376,7 @@ async function importSheets(dbPath, jsonPath, tasksArray) {
  * @param {string} sourceDir is a path to directory where files to be processed are stored.
  * @param {string} tableName is a name of the table in which descriptions are placed.
  * @param {string} mapFilePath is a path to mapping file (stores mappings of in-file headings to names of table columns).
+ * @memberof module:CLI
  */
 async function processDescriptions(dbPath, dbgFilePath, sourceDir, tableName, mapFilePath) {
     const db = new SQLite(path.join(appDir, dbPath));
@@ -464,6 +480,7 @@ async function processDescriptions(dbPath, dbgFilePath, sourceDir, tableName, ma
 // wrappers that take all parameters from config
 /**
  * This wrapper function which runs descriptions extraction: it takes all the arguments from config file and passes them to processDescriptions function.
+ * @memberof module:CLI
  */
 async function processDescriptionsWrapper() {
     return processDescriptions(cfg.dbName, cfg.sources.descriptions.output, cfg.sources.descriptions.dir, cfg.sources.descriptions.table, cfg.sources.descriptions.mapFile);
@@ -471,6 +488,7 @@ async function processDescriptionsWrapper() {
 
 /**
  * This wrapper function which runs descriptions extraction: it takes all the arguments from config file and passes them to importSheets function.
+ * @memberof module:CLI
  */
 async function importSheetsWrapper() {
     const tasks = [cfg.sources.inscriptions, cfg.sources.places];
@@ -479,6 +497,7 @@ async function importSheetsWrapper() {
 
 /**
  * This wrapper function which runs descriptions extraction: it takes all the arguments from config file and passes them to downloadSheets function.
+ * @memberof module:CLI
  */
 async function downloadSheetsWrapper() {
     return downloadSheets(cfg.keyFile, cfg.docID, cfg.sourceFile);
