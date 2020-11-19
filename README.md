@@ -5,8 +5,8 @@
 
 1. Frontend (JQuery, SASS)
 2. Backend (NodeJS, SQLite)
-3. [Autoupdater](/scripts) (NodeJS, SQLite)
-4. [MS Word exporter](/word) (Perl, MS Office/OLE)
+3. [Autoupdater](https://github.com/yaskevich/epigraphy/scripts) (NodeJS, SQLite)
+4. [MS Word exporter](https://github.com/yaskevich/epigraphy/word) (Perl, MS Office/OLE)
 5. [Static files](https://github.com/yaskevich/epidata/)
 
 Docker file currently builds the frontend and backend, filling the database with up-to-date records from Google Spreadsheet. Static files (including MS Word extracts) have to be imported from the repository.
@@ -15,7 +15,7 @@ The same build could be compiled manually, according to the instruction below.
 
 ### Setup
 
-Frontend web-server is a regular [Express.js](https://expressjs.com) application. The [CLI](/cli.js) that fill the database shares dependencies with the frontend, but has independent codebase.
+Frontend web-server is a regular [Express.js](https://expressjs.com) application. The [CLI](https://github.com/yaskevich/epigraphy/cli.js) that fill the database shares dependencies with the frontend, but has independent codebase.
 
 *Completely separate part of the project is task of MS Word files processing: the code is written in Perl and file parsing has to be run on Windows machine with Microsoft Office installed (and Perl, obviously). However, [in this repo](https://github.com/yaskevich/epidata/) preparsed files are provided.*
 
@@ -49,7 +49,7 @@ To successfully run importing tasks, one has to provide
 
 1. valid config file
 2. JWT token: generate Google Token (JWT) for web-service (*keyFile* property as path to file in config) and share the spreadsheet with the Google user who owns the token.
-3. mappings: mapping tables for field names and their respective SQL column codes have to be provided – as CSV files. Currently used mappings are in [mapping](/mapping/) directory of this repository.
+3. mappings: mapping tables for field names and their respective SQL column codes have to be provided – as CSV files. Currently used mappings are in [mapping](https://github.com/yaskevich/epigraphy/mapping/) directory of this repository.
 
 Descriptions files are [here](https://github.com/yaskevich/epidata/), but for importing they have to be put into `data` directory next to `cli.js` Content of `data` is imported as an additional table containing detailed descriptions of objects related by their CIR codes.
 
@@ -87,7 +87,7 @@ As well one should restart NodeJS process, the command depends on environment (`
 
 #### Production
 
-There is [config](ecosystem.config.js) for [PM2](https://pm2.keymetrics.io) (NodeJS process manager). It is not recommended to run NodeJS application in production environment neither via `node` directly nor with `nodemon`.
+There is [config](https://github.com/yaskevich/epigraphy/ecosystem.config.js) for [PM2](https://pm2.keymetrics.io) (NodeJS process manager). It is not recommended to run NodeJS application in production environment neither via `node` directly nor with `nodemon`.
 
 #### Dockerize
 
