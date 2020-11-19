@@ -1,8 +1,7 @@
 'use strict';
 
 /**
- * @file is the root file for the example.
- * It kicks things off.
+ * @file This is the file of command line application that creates and populates the database, as well as updates it.
  * @see <a href="module-CLI.html">CLI</a>
  */
 

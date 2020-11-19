@@ -1,8 +1,8 @@
 'use strict';
 
 /**
- * @file is the root file for the example.
- * It kicks things off.
+ * @file This is the file where placed all logic to query the database.
+ * As for now, the only purpose of interaction with the database, if populating JSON structure that it is used to be presented for a user. Everything is read-only. Web-server does not change the content of the database.
  * @see <a href="module-Database.html">Database</a>
  */
 

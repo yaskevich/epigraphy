@@ -1,8 +1,9 @@
 'use strict';
 
 /**
- * @file index.js is the root file for the example.
- * It kicks things off.
+ * @file This is the file containing web-server built on top of <a href="http://expressjs.com/">Express.js</a> framework.
+ * It serves static content for client (managing authentication of users) and provides data from the database.
+ * All the API consists from two endpoints: retrieving 1) data for all inscriptions (except description details), 2) description of single entry.
  * @see <a href="https://docs.philology.by/module-API.html">API</a>
  */
  
