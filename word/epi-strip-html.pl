@@ -7,19 +7,8 @@ use DBI;
 use Mojo::DOM;
 binmode(STDOUT, ":unix:utf8");
 
-# my @nums = qw/⓪ ① ② ③ ④ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩ ⑪ ⑫ ⑬ ⑭ ⑮ ⑯ ⑰ ⑱ ⑲ ⑳ ㉑ ㉒ ㉓ ㉔ ㉕ ㉖ ㉗ ㉘ ㉙ ㉚ ㉛ ㉜ ㉝ ㉞ ㉟ ㊱ ㊲ ㊳ ㊴ ㊵ ㊶ ㊷ ㊸ ㊹ ㊺ ㊻ ㊼ ㊽ ㊾ ㊿/;
-
-
-#my $dbh = DBI->connect("dbi:SQLite:test.db","","", {sqlite_unicode => 1,  AutoCommit => 0, RaiseError => 1}) or die "Could not connect";
-#my $sql  = "INSERT INTO slownik (title, qty, auth, srclist, body, pnum, entype, ref_targets)  VALUES (?, ?,?,? , ?, ?,?,?)";
-#my $sth = $dbh->prepare($sql);
-# exit;
-
 my ($filename, $out_file)   = @ARGV;
-if (defined $filename and -f $filename){
-	# say $filename;
-	# exit();
-} else {
+unless (defined $filename and -f $filename){
 	say "Error with filename to parse.\nExited.";
 	exit();
 }
@@ -34,13 +23,12 @@ if (!$out_file) {
 }
 
 my $dom = Mojo::DOM->new($content);
+ # remove head section
 $dom->find('head')->map('remove');
 
 # processing footnotes
 my %ftn = ();
-
 # div id=ftn1
-
 my $div = 1;
 while () {
   # say "div #".$div;
@@ -74,6 +62,7 @@ while () {
 		# $_->remove();
 # });
 
+# process links
 $dom->find('a')->each(sub {
 	if ($_->{name}){
 		if ($_->{name}=~ m/_ftnref/g){
@@ -92,7 +81,6 @@ $dom->find('a')->each(sub {
 });
 
 # removing meaningless attributes & adding custom tags
-
 $dom->find('*')->each(sub {
    delete $_->{class};
    delete $_->{lang};
@@ -111,16 +99,10 @@ my $str  = $dom->to_string;
 
 # removing blank lines
 $str =~ s/^\s*\n//mg;
-
 $str =~ s/\<\/cyr\>\<cyr\>//g;
-
 # $str =~ s/\n/ /g;
-
 # $str =~ s/(?=\[)/\n/g;
 # $str =~ s/(?<=\])/\n/g;
-
-# say $str;
-
 
 open my $ind, '>:encoding(UTF-8)', $out_file;
 print $ind $str;

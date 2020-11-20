@@ -8,7 +8,6 @@ use  File::Path 'make_path';
 use File::Basename;
 binmode(STDOUT, ":unix:utf8");
 
-
 open(FH, '>', "processing-log.txt") or die $!;
 
 opendir my $dir, "docx" or die "Cannot open directory: $!";
@@ -24,8 +23,6 @@ foreach my $dx (@files) {
 		say STDERR "!!! ". $dx;
 	}
 }
-
-
 
 close(FH);
 
@@ -51,7 +48,6 @@ sub doStuff {
 	say $cmd2xml;
 	preparePath($path_desc);
 	system($cmd2xml);
-	
 	say ("#" x 120);
 	# exit
 
