@@ -4,8 +4,8 @@
 ### Project components
 
 1. [Frontend](https://github.com/yaskevich/epigraphy/tree/master/public) (JQuery, SASS)
-2. [Backend](https://github.com/yaskevich/epigraphy/blob/master/cli.js) (NodeJS, SQLite)
-3. [Autoupdater](https://github.com/yaskevich/epigraphy/cli.js) (NodeJS, SQLite)
+2. [Backend](https://github.com/yaskevich/epigraphy/blob/master/index.js) (NodeJS, SQLite)
+3. [Autoupdater](https://github.com/yaskevich/epigraphy/blob/master/cli.js) (NodeJS, SQLite)
 4. [MS Word exporter](https://github.com/yaskevich/epigraphy//tree/master/word) (Perl, MS Office/OLE)
 5. [Static files](https://github.com/yaskevich/epidata/)
 
