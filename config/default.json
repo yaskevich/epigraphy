@@ -1,17 +1,22 @@
 {
   // app configs
   "app": {
+	// ID of Google Spreadsheet to parse into database
     "docID": "1foslhreAi1LTBBtvq7eKWaB_3BbSbXgMFR2FQ8T9GR4",
+	// Google token to access Google.Drive
     "keyFile": ["jwt.json"],
+	// file name for the database
 	"dbName": "cir.db", 
+	// working file name of Google Spreadsheet downloaded as JSON
     "sourceFile": "corpus.json",
+	// settings of sources for the datbase tables
 	"sources": {
-        "inscriptions": {
-            "table": "corpus",
-            "sheetIndex": 0,
-            "mapFile": ["mapping", "mapping1.csv"],
-            "dbgFile": ["debug", "out-cir.txt"],
-			"dbgDir": ["debug", "all"],
+        "inscriptions": { // working name of unit
+            "table": "corpus", // table name
+            "sheetIndex": 0, // index in Google Spreadsheet workbook
+            "mapFile": ["mapping", "mapping1.csv"], // path to mapping, as an array
+            "dbgFile": ["debug", "out-cir.txt"], // path to file where debugging output (in single file) is put, as an array
+			"dbgDir": ["debug", "all"], // path to file where debugging output (in separate files) is put
 			"dbgMode": 2 // 0 – nothing, 1 – only file,  2 – print every proprety into separate file
         },
         "places": {
@@ -29,10 +34,12 @@
             "mapFile": ["mapping", "mapping.csv"]
 		}
 	},
+	// config of web-server
     "server": {
+	  // host
       "host": "localhost",
-      "port": 7528,
-      "secret": "dfgsdg3465t54gsvjcinjbn32edx"
+	  // port
+      "port": 7528	  
     }
   }
 }

@@ -8,7 +8,7 @@
  */
  
  /**
- * Module which processes client queries.
+ * Module which processes client queries.<br/><span style="color:red;font-weight:bold;">It does not have any methods</span>.
  * @module API
  */
 const fs = require('fs');
@@ -83,9 +83,8 @@ passport.deserializeUser(async function(id, cb) {
 });
 
 // session
-
 app.use(session({
-  secret: cfg.server.secret,
+  secret: process.env.SESSION_SECRET || Math.random().toString(36).substring(2),
   resave: false,
   saveUninitialized: true,
   cookie: { secure: true }
@@ -94,7 +93,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // IP logging / authentication checking middleware
-
 app.use( async(req, res, next) => {
     // const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     if (!req.isAuthenticated() && !['/login', '/bulma.custom.css', '/omega-150x150.png'].includes(req.url)) {
