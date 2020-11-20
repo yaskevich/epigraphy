@@ -1,2 +1,2 @@
-rm -rf out
-jsdoc *.js README.md
+rm -rf docs
+jsdoc *.js README.md -d docs

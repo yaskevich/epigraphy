@@ -57,7 +57,7 @@ To make full import use `node cli.js -a`
 
 To successfully run importing tasks, one has to provide
 
-1. valid config file
+1. valid [config file](https://github.com/yaskevich/epigraphy/blob/master/config/default.json) 
 2. JWT token: generate Google Token (JWT) for web-service (*keyFile* property as path to file in config) and share the spreadsheet with the Google user who owns the token.
 3. mappings: mapping tables for field names and their respective SQL column codes have to be provided – as CSV files. Currently used mappings are in [mapping](https://github.com/yaskevich/epigraphy/tree/master/mapping/) directory of this repository.
 
@@ -65,7 +65,7 @@ Descriptions files are [here](https://github.com/yaskevich/epidata/), but for im
 
 #### Before start
 
-Make sure that you provided  environment variables USER_ID, USER_PASSWORD and SESSION_SECRET either in [dotenv](https://www.npmjs.com/package/dotenv) [config](https://github.com/yaskevich/epigraphy/blob/master/config/default.json) file in root directory, or pass them with shell. They are used to allow administrator to log in. Currently, access to the project is limited via authorization interface.
+Make sure that you provided  environment variables USER_ID, USER_PASSWORD and SESSION_SECRET either in [dotenv](https://www.npmjs.com/package/dotenv) config file in root directory, or pass them with shell. They are used to allow administrator to log in. Currently, access to the project is limited via authorization interface.
 
 Perform `node ./cli.js -a -v ` – the database will be filled with actual data.
 
