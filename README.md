@@ -101,6 +101,11 @@ There is [config](https://github.com/yaskevich/epigraphy/ecosystem.config.js) fo
 
 #### Dockerize
 
+Currently, there are two Docker configurations, both accompanied with corresponding start scripts
+
+1. Simple (in the root directory). One has to run `git clone` and perform all the above mentioned steps of populating the database before. Then Docker would able to run it inside container.
+2. Complex (in `docker-update` directory). It automatically clones main repository and one with resources, after that it builds the database and starts the web-server. One has to provide deploy keys  (as *id_rsa_epigraphy* and *id_rsa_epidata*) , as well as JWT token (as *jwt.json*).
+
 Run `run-docker.sh` to start the app in Docker container available on local port **3333**.
 
 ### Future
