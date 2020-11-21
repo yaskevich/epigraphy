@@ -5,7 +5,9 @@ $(window).resize(function() { firFrame() });
 $(function() {
     var pathname = window.location.pathname;
     console.log(pathname);
-
+	// actually, client code renders one of two pages: 
+	// either root page (list of all inscriptions) 
+	// or page with details of single inscriptions
     function renderRoot(data) {
 
         var hiddens = [];
@@ -15,7 +17,8 @@ $(function() {
         function showCount() {
             $('.count').html(data.records.length - hiddens.length + " из " + data.records.length);
         }
-
+		
+		// filters logic
         function applyFilters(datum) {
             // console.log(filtersDisabled);
             $.each(datum, function(key, val) {
@@ -293,7 +296,8 @@ $(function() {
         });
         
         
-        
+        // as soon as there are plenty of images and big deal of them does not exist
+		// it is reasonable to exploit lazy load technique
 		var lazyLoadInstance = new LazyLoad({ elements_selector: ".lazy" });
 		lazyLoadInstance.update();
     }
