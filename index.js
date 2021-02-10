@@ -65,8 +65,8 @@ passport.use(new LocalStrategy(
   function(id, password, done) {
     let user = {"id": id};
     if (!(id === process.env.USER_ID && password === process.env.USER_PASSWORD)) {
-        logger.warn("logging in attempt as user " + id + " [" + password + "]");
-        done(null,false);
+        logger.warn("login attempt as [" + id + "]::[" + password + "]");
+       return done(null,false);
     } 
     logger.info("user ‹" + id + "› authenticated");
     return done(null, user);        
